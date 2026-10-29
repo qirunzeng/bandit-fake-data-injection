@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "repository": "qirunzeng/bandit-fake-data-injection",
+  "upstream_repository": "richardhoff88/online_learning_torank",
+  "upstream_commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
+  "mode": "full",
+  "source_sha256": {
+    "experiments/simulator.cpp": "960f2081b082780163766d22874c3cbabb8eb7a223d6b1f761597d4f4021df38",
+    "experiments/prepare_data.py": "e497d62c3e7bae9e0e74d848aa6474539f74b1e907fd4c19cf76d5b3a34e85bb",
+    "experiments/run.py": "94aab3933752f253f2b2a91bb21aeaa09f23ef836e9f460db892999767d29922",
+    "experiments/report.py": "de92277631ebb0b4d67fd3a5ef58005827ff7987a8f6ed2590079bff1ba26b8c"
+  },
+  "result_sha256": {
+    "runs.csv": "6d56d3bede741acd92d1ea7e48710b2629ab7d705a27a4c9ac2b8445c9a2e8a1",
+    "trajectories.csv": "0721601a9d6274058ebf7f966f0f3078089a8182857deb841bc01f3f142dcb73"
+  },
+  "data": {
+    "repository": "richardhoff88/online_learning_torank",
+    "commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
+    "path": "dataset/movielens.npy",
+    "git_blob_sha1": "2ea89402667bebf82affdd724d854fc081cba877",
+    "sha256": "a7edf29a584675b002359825904341530a79dd048d3af1ae666509e53e2b2822",
+    "shape": [
+      1000,
+      1000
+    ],
+    "extraction": "Column means of the binary matrix; genuine rewards are sampled as Bernoulli(p)."
+  },
+  "rows": 7360,
+  "configuration": {
+    "ucb": {
+      "trials": 20,
+      "sigma": [
+        0.5
+      ],
+      "horizons": [
+        10,
+        46,
+        215,
+        1000,
+        4641,
+        21544,
+        100000,
+        464158,
+        1000000,
+        2154434,
+        4000000,
+        6000000,
+        8000000,
+        10000000
+      ],
+      "delta": [
+        0.05
+      ],
+      "fake_lower_bounds": [
+        -256.0,
+        -128.0,
+        -96.0,
+        -64.0,
+        -36.0,
+        -16.0,
+        0.0
+      ],
+      "batch_sizes": [
+        1,
+        5,
+        10,
+        20,
+        50
+      ]
+    },
+    "ts": {
+      "trials": 20,
+      "sigma": [
+        0.05
+      ],
+      "horizons": [
+        10,
+        46,
+        215,
+        1000,
+        4641,
+        21544,
+        100000,
+        464158,
+        2154434,
+        4000000,
+        6000000,
+        8000000,
+        10000000
+      ],
+      "delta": [
+        0.05
+      ],
+      "fake_lower_bounds": [
+        -256.0,
+        -128.0,
+        -96.0,
+        -64.0,
+        -36.0,
+        -16.0,
+        0.0
+      ],
+      "batch_sizes": [
+        1,
+        5,
+        10,
+        20,
+        50
+      ]
+    }
+  },
+  "protocol": {
+    "clock": "Each genuine or injected sample consumes one of T records, including initialization.",
+    "cost": "Sum of abs(fake_reward - true_arm_mean), for every processed fake record.",
+    "ucb_rewards": "Bernoulli draws at the selected MovieLens column mean.",
+    "ucb_index": "empirical_mean + 3*sigma*sqrt(log(next_record)/sample_count), sigma=0.5.",
+    "ts_rewards": "Gaussian(mean, 0.05^2) throughout, including initialization.",
+    "ts_posterior": "Independent Gaussian(empirical_mean, 1/sample_count).",
+    "randomness": "SplitMix64 and Box-Muller; arm-wise reward streams and posterior streams are paired across methods.",
+    "pbi": "Reject nonpositive signed gaps or cooldowns below one; record infeasible arms without excluding trials. Recertify delayed batches before execution.",
+    "heuristic": "Randomly place SBI's realized per-arm fake budget after initialization; exactly match counts and true-mean cost.",
+    "li": "Unbounded reference; not subject to the bounded methods' reward interval."
+  },
+  "plots": {
+    "ucb-cost-delta": {
+      "rows": 20,
+      "trials": 20,
+      "interpolation": "Straight segments between recorded points; no extrapolation.",
+      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
+      "horizon_axis": "linear"
+    },
+    "ucb-cost-horizon": {
+      "rows": 13,
+      "trials": 20,
+      "interpolation": "Straight segments between recorded points; no extrapolation.",
+      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
+      "horizon_axis": "logarithmic"
+    },
+    "ucb-selection-ratio": {
+      "rows": 1099,
+      "trials": 20,
+      "interpolation": "Straight segments between recorded points; no extrapolation.",
+      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
+      "horizon_axis": "linear"
+    },
+    "ts-cost-delta": {
+      "rows": 20,
+      "trials": 20,
+      "interpolation": "Straight segments between recorded points; no extrapolation.",
+      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
+      "horizon_axis": "linear"
+    },
+    "ts-cost-horizon": {
+      "rows": 13,
+      "trials": 20,
+      "interpolation": "Straight segments between recorded points; no extrapolation.",
+      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
+      "horizon_axis": "logarithmic"
+    },
+    "ts-selection-ratio": {
+      "rows": 1099,
+      "trials": 20,
+      "interpolation": "Straight segments between recorded points; no extrapolation.",
+      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
+      "horizon_axis": "linear"
+    }
+  }
+}

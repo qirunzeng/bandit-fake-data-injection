@@ -1,0 +1,20 @@
+% Generated from corrected experiments; markers are measured points.
+\begin{tikzpicture}
+\begin{axis}[fdi axis,xlabel={Record index $t$ ($10^4$)}, title={Target-arm ratio},
+    xmin=0, xmax=100000, xtick={0,25000,50000,75000,100000},
+    xticklabels={0,2.5,5,7.5,10}, scaled x ticks=false,
+    ymin=0, ymax=1.04, ytick={0,0.25,0.5,0.75,1}, scaled y ticks=false]
+\addplot[fdi sbi band, forget plot] table[x=x,y=sbi] {fig/data/ucb-selection-ratio-bands.dat} \closedcycle;
+\addplot[fdi pbi band, forget plot] table[x=x,y=pbi] {fig/data/ucb-selection-ratio-bands.dat} \closedcycle;
+\addplot[fdi li band, forget plot] table[x=x,y=li] {fig/data/ucb-selection-ratio-bands.dat} \closedcycle;
+\addplot[fdi heuristic band, forget plot] table[x=x,y=heuristic] {fig/data/ucb-selection-ratio-bands.dat} \closedcycle;
+\addplot[fdi sbi, mark=none] table[x=x,y=sbi] {fig/data/ucb-selection-ratio.dat};
+\addplot[fdi sbi, only marks, forget plot] table[x=x,y=sbi] {fig/data/ucb-selection-ratio-marks.dat};
+\addplot[fdi pbi, mark=none] table[x=x,y=pbi] {fig/data/ucb-selection-ratio.dat};
+\addplot[fdi pbi, only marks, forget plot] table[x=x,y=pbi] {fig/data/ucb-selection-ratio-marks.dat};
+\addplot[fdi li, mark=none] table[x=x,y=li] {fig/data/ucb-selection-ratio.dat};
+\addplot[fdi li, only marks, forget plot] table[x=x,y=li] {fig/data/ucb-selection-ratio-marks.dat};
+\addplot[fdi heuristic, densely dashed, mark=none] table[x=x,y=heuristic] {fig/data/ucb-selection-ratio.dat};
+\addplot[fdi heuristic, densely dashed, only marks, forget plot] table[x=x,y=heuristic] {fig/data/ucb-selection-ratio-marks.dat};
+\end{axis}
+\end{tikzpicture}

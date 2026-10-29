@@ -1,1 +1,12 @@
 MovieLens/
+
+# Local builds and interpreter caches
+build/
+__pycache__/
+*.py[cod]
+.DS_Store
+*.log
+*.aux
+*.fls
+*.fdb_latexmk
+results/pilot/

@@ -1,0 +1,12 @@
+{
+  "repository": "richardhoff88/online_learning_torank",
+  "commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
+  "path": "dataset/movielens.npy",
+  "git_blob_sha1": "2ea89402667bebf82affdd724d854fc081cba877",
+  "sha256": "a7edf29a584675b002359825904341530a79dd048d3af1ae666509e53e2b2822",
+  "shape": [
+    1000,
+    1000
+  ],
+  "extraction": "Column means of the binary matrix; genuine rewards are sampled as Bernoulli(p)."
+}

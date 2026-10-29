@@ -1,0 +1,16 @@
+name: Experiment validation
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build, run self-checks, and generate pilot results
+        run: python3 experiments/run.py --quick --output results/pilot --threads 2
+      - name: Audit sample counts and true-mean costs
+        run: python3 experiments/report.py --source results/pilot --audit-only
+      - name: Check deterministic parallel execution
+        run: python3 experiments/check_reproducibility.py

@@ -1,0 +1,46 @@
+% Palette and open markers follow the neighboring Bounded manuscript.
+\definecolor{fdiblue}{RGB}{31,119,180}
+\definecolor{fdiorange}{RGB}{255,127,14}
+\definecolor{fdigreen}{RGB}{44,160,44}
+\definecolor{fdipurple}{RGB}{148,103,189}
+\tikzset{
+    fdi sbi/.style={color=fdiblue, solid, line width=0.8pt, mark=o,
+        mark size=1.6pt, mark options={solid, fill=white}},
+    fdi pbi/.style={color=fdiorange, solid, line width=0.8pt, mark=square,
+        mark size=1.6pt, mark options={solid, fill=white}},
+    fdi li/.style={color=fdigreen, solid, line width=0.8pt, mark=triangle,
+        mark size=1.8pt, mark options={solid, fill=white}},
+    fdi heuristic/.style={color=fdipurple, solid, line width=0.8pt, mark=diamond,
+        mark size=1.8pt, mark options={solid, fill=white}},
+    fdi sbi band/.style={fill=fdiblue, fill opacity=0.12, draw=none},
+    fdi pbi band/.style={fill=fdiorange, fill opacity=0.12, draw=none},
+    fdi li band/.style={fill=fdigreen, fill opacity=0.12, draw=none},
+    fdi heuristic band/.style={fill=fdipurple, fill opacity=0.12, draw=none}
+}
+\pgfplotsset{fdi axis/.style={
+    scale only axis, width=0.73\linewidth, height=2.3cm,
+    label style={font=\scriptsize}, tick label style={font=\scriptsize},
+    title style={at={(axis description cs:0,1.04)}, anchor=south west,
+        font=\scriptsize, inner sep=0pt},
+    tick align=outside, tick pos=left, axis on top,
+    grid=none, unbounded coords=jump,
+    scaled ticks=false,
+    max space between ticks=40pt,
+    filter discard warning=false,
+}}
+\newcommand{\fdiLegendSample}[1]{%
+    \tikz[baseline=-0.5ex]{\draw[#1] (0,0)--(0.42,0);
+        \draw[#1] plot coordinates {(0.21,0)};}}
+\newcommand{\fdiPanel}[1]{%
+    \begin{minipage}[t][3.6cm][t]{\linewidth}
+        \vspace{0pt}\centering\input{#1}
+    \end{minipage}}
+\newcommand{\fdiLegendContents}{%
+    \begin{tabular}{@{}llll@{}}
+        \fdiLegendSample{fdi sbi}\ SBI &
+        \fdiLegendSample{fdi pbi}\ PBI &
+        \fdiLegendSample{fdi li}\ LI &
+        \fdiLegendSample{fdi heuristic, densely dashed}\ Heuristic
+    \end{tabular}}
+\newcommand{\fdiLegend}{%
+    \par\vspace{2pt}{\scriptsize\fdiLegendContents}}
