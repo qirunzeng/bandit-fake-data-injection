@@ -24,12 +24,12 @@
     "ucb_infeasible_trials_at_T_1000000": 2
   },
   "sha256": {
-    "experiments/simulator.cpp": "1e8ab26797ff46fdecf321d8f8249f0423908ce9c3979481887158195b8ec0ca",
+    "experiments/simulator.cpp": "8209d2797d946b7bafc73b70631e584452794b3d9e106249f68559a2b9090dc9",
     "experiments/search_reward.cpp": "22a928269a58a374a0ea4df7eb1bc442e85996a500d05f33e709a15090af9fb8",
     "experiments/audit_pbi.cpp": "cd4c9bdd7990035847708ab81447f7e884220b0e24c40cc1ea9bf3e1f50c6924",
     "results/reward-search/candidates.csv": "6abac352ceaa8afff65fbaf52072c026da187866239e7d3a4aeeb50598e03bed",
     "results/reward-search/first-trigger.csv": "cc1982283e24eb89de54a31cd63f544bbe66c38674141cb4d997f3a648fe5a4c",
-    "results/horizon/manifest.json": "6fac6c7be81f1b5069b61688d235800daf6a62ef7ff5d8bdf70bd3cbcbbadcf4"
+    "results/horizon/manifest.json": "6127fabf2037f715181d8d5a5d03b9c08b716b6b08c16ff08e3d0d34d5b0a2ee"
   },
   "plotted_horizons": [
     10,
@@ -153,5 +153,6 @@
     "line_points_per_panel": 112,
     "marker_symbols_per_panel": 11,
     "note": "Short horizons need not trigger or complete all arms; the original complete-suppression calibration grid is unchanged."
-  }
+  },
+  "optimization_validation": "results/validation/optimization.json"
 }

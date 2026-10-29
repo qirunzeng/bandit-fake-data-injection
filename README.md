@@ -75,3 +75,5 @@ python3 experiments/check_reproducibility.py
 The publication run uses seed base 3141592653, separate from the exploratory parameter probes. Arm-wise reward streams are paired across methods. Single-worker and multi-worker execution produce byte-identical results on the same platform.
 
 See [the correction record](docs/CORRECTIONS.md) for changes from the archived implementation.
+
+See [the performance review](docs/PERFORMANCE.md) for behavior-preserving optimizations, measured timings, and byte-for-byte regression checks.

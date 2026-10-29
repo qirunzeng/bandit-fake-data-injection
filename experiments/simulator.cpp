@@ -14,6 +14,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <vector>
 
@@ -22,8 +23,8 @@ constexpr double PI = 3.14159265358979323846;
 using Counts = std::array<long long, K>;
 using Values = std::array<double, K>;
 
-void require(bool ok, const std::string& why) {
-    if (!ok) throw std::runtime_error(why);
+void require(bool ok, std::string_view why) {
+    if (!ok) throw std::runtime_error(std::string(why));
 }
 
 struct Random {
@@ -70,22 +71,26 @@ struct Result {
 };
 
 struct State {
-    Config c;
-    Values truth, sums{}, inverse_roots{};
+    const Config c;
+    const bool is_ucb, trace_ratio;
+    const double noise_sigma;
+    Values truth, sums{}, empirical_means{}, inverse_roots{};
     Counts counts{};
     std::array<bool, K> completed{};
     Result r;
     std::vector<Random> rewards;
     Random posterior, schedule;
-    explicit State(Config cfg, Values mu) : c(cfg), truth(mu),
+    explicit State(const Config& cfg, const Values& mu) : c(cfg),
+        is_ucb(c.learner == "ucb"), trace_ratio(c.grid == "ratio"), noise_sigma(c.sigma()), truth(mu),
         posterior(c.seed ^ 0xaadc870ef831d633ULL),
         schedule(c.seed ^ 0x32c6a2e0fa61e011ULL) {
+        rewards.reserve(K);
         for (int i = 0; i < K; ++i) rewards.emplace_back(c.seed + (i + 1) * 0x123456789abcdefULL);
     }
-    double mean(int i) const { return counts[i] ? sums[i] / counts[i] : 0; }
+    double mean(int i) const { return empirical_means[i]; }
     double beta(long long n) const {
         require(n > 0, "confidence bound before initialization");
-        return c.sigma() * std::sqrt(2.0 / n * std::log(PI * PI * K * double(n) * n / (3 * c.delta)));
+        return noise_sigma * std::sqrt(2.0 / n * std::log(PI * PI * K * double(n) * n / (3 * c.delta)));
     }
     void complete(int arm) {
         if (!completed[arm]) { completed[arm] = true; ++r.completed_arms; }
@@ -105,33 +110,41 @@ struct State {
             if (r.fake[arm] > 0) ++r.post_first_injection_pulls;
         }
         ++counts[arm]; sums[arm] += reward;
+        // Only this arm changed; reuse the exact quotient in subsequent decisions.
+        empirical_means[arm] = sums[arm] / counts[arm];
         inverse_roots[arm] = 1.0 / std::sqrt(double(counts[arm]));
         ++r.time;
-        if (c.grid == "ratio" && (r.time <= 100 || r.time % 100 == 0 || r.time == c.horizon))
+        if (trace_ratio && (r.time <= 100 || r.time % 100 == 0 || r.time == c.horizon))
             r.trace.emplace_back(r.time, double(r.target) / r.time);
     }
     void genuine(int i) {
         double reward = truth[i];
-        if (!c.constant_rewards) reward = c.learner == "ucb"
+        if (!c.constant_rewards) reward = is_ucb
             ? double(rewards[i].uniform() < truth[i])
-            : truth[i] + c.sigma() * rewards[i].normal();
+            : truth[i] + noise_sigma * rewards[i].normal();
         record(i, reward, false);
     }
     void initialize() { for (int i = 0; i < K && r.time < c.horizon; ++i) genuine(i); }
     int choose() {
         int best = 0;
         double score = -std::numeric_limits<double>::infinity();
-        double scale = 3 * c.sigma() * std::sqrt(std::log(double(r.time + 1)));
-        for (int i = 0; i < K; ++i) {
-            double value = mean(i) + inverse_roots[i] *
-                (c.learner == "ucb" ? scale : posterior.normal());
-            if (value > score) { score = value; best = i; }
+        if (is_ucb) {
+            double scale = 3 * noise_sigma * std::sqrt(std::log(double(r.time + 1)));
+            for (int i = 0; i < K; ++i) {
+                double value = mean(i) + inverse_roots[i] * scale;
+                if (value > score) { score = value; best = i; }
+            }
+        } else {
+            for (int i = 0; i < K; ++i) {
+                double value = mean(i) + inverse_roots[i] * posterior.normal();
+                if (value > score) { score = value; best = i; }
+            }
         }
         return best;
     }
     double benchmark(int i) const {
-        double gap = 3 * c.sigma() * c.delta0;
-        if (c.learner == "ts") {
+        double gap = 3 * noise_sigma * c.delta0;
+        if (!is_ucb) {
             double gamma = std::sqrt(2 * std::log(PI * PI * K / (3 * c.delta))
                                       + 4 * counts[i] * c.delta0 * c.delta0);
             gap = gamma * (inverse_roots[i] + inverse_roots[K - 1]);
@@ -159,7 +172,7 @@ struct State {
             double gap = lower_target - post;
             if (!(gap > 0)) return false;
             double log_deadline;
-            if (c.learner == "ucb") log_deadline = gap * gap * n / (9 * c.sigma() * c.sigma());
+            if (is_ucb) log_deadline = gap * gap * n / (9 * noise_sigma * noise_sigma);
             else {
                 double radius = 1 / std::sqrt(n) + inverse_roots[K - 1];
                 log_deadline = gap * gap / (4 * radius * radius)
@@ -182,6 +195,8 @@ struct State {
         require(std::accumulate(r.genuine.begin(), r.genuine.end(), 0LL) + r.injected == r.time,
                 "genuine/fake mass balance");
         require(r.fake[K - 1] == 0 && r.target == r.genuine[K - 1], "target accounting");
+        for (int i = 0; i < K; ++i)
+            require(empirical_means[i] == (counts[i] ? sums[i] / counts[i] : 0), "empirical-mean cache mismatch");
         return r;
     }
 };
@@ -220,18 +235,22 @@ bool inject_due_batches(State& s, Counts& remaining, Counts& due, Counts& waits,
 
 Result simulate(const Config& c, const Values& means, const std::string& method,
                 const Counts& matched_budget = Counts{}, bool stop_on_failure = false) {
+    const bool is_heuristic = method == "heuristic", is_pbi = method == "pbi";
+    const bool is_sbi = method == "sbi", is_li = method == "li";
     State s(c, means); s.initialize();
     if (s.r.time == c.horizon) return s.finish();
     long long threshold = std::max(1LL, static_cast<long long>(std::ceil(std::log(double(c.horizon)) / (c.delta0 * c.delta0))));
     Counts remaining{}, due{}, waits{};
     std::array<bool, K> planned{};
-    if (method == "heuristic") remaining = matched_budget;
+    if (is_heuristic) remaining = matched_budget;
+    long long heuristic_remaining = std::accumulate(remaining.begin(), remaining.end(), 0LL);
+    long long next_batch_at = std::numeric_limits<long long>::max();
     while (s.r.time < c.horizon) {
-        if (method != "heuristic") {
+        if (!is_heuristic && s.r.planned < K - 1) {
             for (int i = 0; i < K - 1; ++i) if (!planned[i] && s.counts[i] >= threshold) {
                 planned[i] = true; ++s.r.planned;
                 double ell = s.benchmark(i);
-                if (method == "li") {
+                if (is_li) {
                     s.r.prescribed[i] = 1;
                     s.record(i, (s.counts[i] + 1) * ell - s.sums[i], true, false);
                 } else {
@@ -239,38 +258,42 @@ Result simulate(const Config& c, const Values& means, const std::string& method,
                     if (n < 0) { ++s.r.infeasible; if (stop_on_failure) return s.r; continue; }
                     s.r.prescribed[i] = n;
                     if (n == 0) s.complete(i);
-                    if (method == "sbi") {
+                    if (is_sbi) {
                         while (n-- > 0 && s.r.time < c.horizon) s.record(i, c.lower, true);
                     } else if (n > 0) {
                         if (!s.cooldown(i, n, waits[i])) { ++s.r.infeasible; if (stop_on_failure) return s.r; continue; }
                         remaining[i] = n; due[i] = s.r.time;
+                        next_batch_at = std::min(next_batch_at, due[i]);
                     }
                 }
                 if (s.r.time == c.horizon) break;
             }
         }
         if (s.r.time == c.horizon) break;
-        if (method == "pbi") {
+        if (is_pbi && s.r.time >= next_batch_at) {
             if (inject_due_batches(s, remaining, due, waits, stop_on_failure)) {
                 if (stop_on_failure && s.r.infeasible) return s.r;
+                next_batch_at = std::numeric_limits<long long>::max();
+                for (int i = 0; i < K - 1; ++i)
+                    if (remaining[i] > 0) next_batch_at = std::min(next_batch_at, due[i]);
                 continue;
             }
-        } else if (method == "heuristic") {
-            long long total = std::accumulate(remaining.begin(), remaining.end(), 0LL);
+        } else if (is_heuristic) {
+            long long total = heuristic_remaining;
             long long slots = c.horizon - s.r.time;
             require(total <= slots, "unspendable matched budget");
             if (total > 0 && s.schedule.uniform() < double(total) / slots) {
                 long long pick = static_cast<long long>(s.schedule.uniform() * total);
                 int arm = 0;
                 while (pick >= remaining[arm]) { pick -= remaining[arm]; ++arm; }
-                --remaining[arm]; s.record(arm, c.lower, true); continue;
+                --remaining[arm]; --heuristic_remaining; s.record(arm, c.lower, true); continue;
             }
         }
         s.genuine(s.choose());
         if (stop_on_failure && (s.r.post_injection_pulls || s.r.post_first_injection_pulls)) return s.r;
     }
     Result out = s.finish();
-    if (method == "heuristic") {
+    if (is_heuristic) {
         require(out.fake == matched_budget, "heuristic must match realized SBI counts per arm");
     }
     return out;
@@ -316,7 +339,7 @@ void self_test() {
     Config counter = c; counter.horizon = 1000000; counter.lower = -1000;
     counter.delta = 0.1; counter.batch = 1;
     State invalid(counter, means); invalid.counts.fill(1); invalid.inverse_roots.fill(1);
-    invalid.counts[0] = 346; invalid.sums[0] = 3460; invalid.r.time = 355;
+    invalid.counts[0] = 346; invalid.sums[0] = 3460; invalid.empirical_means[0] = 10; invalid.r.time = 355;
     invalid.inverse_roots[0] = 1 / std::sqrt(346.0);
     long long wait = 0;
     require(!invalid.cooldown(0, 6, wait), "negative-gap PBI counterexample must be rejected");

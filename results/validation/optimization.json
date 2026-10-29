@@ -1,0 +1,55 @@
+{
+  "baseline_commit": "eb00cbe4fe475ec9ce2c0da331763f901ef52052",
+  "baseline_simulator_sha256": "1e8ab26797ff46fdecf321d8f8249f0423908ce9c3979481887158195b8ec0ca",
+  "optimized_simulator_sha256": "8209d2797d946b7bafc73b70631e584452794b3d9e106249f68559a2b9090dc9",
+  "platform": "Darwin",
+  "architecture": "arm64",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+  "flags": [
+    "-std=c++17",
+    "-O3",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-pthread"
+  ],
+  "benchmark": "One worker; two learners, four methods, T=1000000; seven alternating paired runs including process and CSV I/O.",
+  "seconds": {
+    "baseline": [
+      0.485849959,
+      0.46992770800000017,
+      0.470509292,
+      0.4731351250000002,
+      0.4784719159999997,
+      0.47307291699999965,
+      0.48160374999999966
+    ],
+    "optimized": [
+      0.4530207089999999,
+      0.430764708,
+      0.44929058300000024,
+      0.41580383399999965,
+      0.4331397919999995,
+      0.42897766699999984,
+      0.4348542919999998
+    ]
+  },
+  "median_baseline_seconds": 0.4731351250000002,
+  "median_optimized_seconds": 0.4331397919999995,
+  "median_elapsed_time_reduction_percent": 8.45325804124153,
+  "full_method_runs": 17920,
+  "full_results_byte_identical": true,
+  "result_sha256": {
+    "runs.csv": "50a82a00fd63dc12ccae747dad4e85fc559812c707057f5d79935f11302cf262",
+    "trajectories.csv": "160db7cb257948ffdacd95e5675501c92215c1b147d26ff3f5ae803c08a177ec"
+  },
+  "regression_cases": [
+    "small-horizons",
+    "sensitivity-grids",
+    "small-batches",
+    "recorded-trajectories",
+    "million-records"
+  ],
+  "thread_determinism": "single-worker and three-worker CSVs byte-identical",
+  "reward_search_and_first_trigger_audit": "byte-identical"
+}
