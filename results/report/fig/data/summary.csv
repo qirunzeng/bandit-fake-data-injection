@@ -1,4 +1,8 @@
 learner,grid,x,method,trials,mean_cost,mean_fakes,mean_ratio,infeasible_trials,ratio_at_least_95pct_trials,fully_suppressed_trials
+ts,horizon,10.0,heuristic,20,0.0,0.0,0.1,0,0,0
+ts,horizon,10.0,li,20,0.0,0.0,0.1,0,0,0
+ts,horizon,10.0,pbi,20,0.0,0.0,0.1,0,0,0
+ts,horizon,10.0,sbi,20,0.0,0.0,0.1,0,0,0
 ts,horizon,10000.0,heuristic,20,742.5475,10.5,0.00505,0,0,0
 ts,horizon,10000.0,li,20,560.3896093331216,9.0,0.9901,0,20,20
 ts,horizon,10000.0,pbi,20,742.5475,10.5,0.98995,0,20,20
@@ -43,6 +47,10 @@ ts,horizon,1000000.0,heuristic,20,1247.9175,17.65,9.035e-05,0,0,0
 ts,horizon,1000000.0,li,20,753.473098211559,9.0,0.999865,0,20,20
 ts,horizon,1000000.0,pbi,20,1247.9175,17.65,0.99985635,0,20,20
 ts,horizon,1000000.0,sbi,20,1247.9175,17.65,0.99985635,0,20,20
+ucb,horizon,10.0,heuristic,20,0.0,0.0,0.1,0,0,0
+ucb,horizon,10.0,li,20,0.0,0.0,0.1,0,0,0
+ucb,horizon,10.0,pbi,20,0.0,0.0,0.1,0,0,0
+ucb,horizon,10.0,sbi,20,0.0,0.0,0.1,0,0,0
 ucb,horizon,10000.0,heuristic,20,2774.8459,39.2,0.01849,0,0,0
 ucb,horizon,10000.0,li,20,2431.9364161165536,9.0,0.7912,0,0,20
 ucb,horizon,10000.0,pbi,20,2774.8459000000003,39.2,0.78818,0,0,20

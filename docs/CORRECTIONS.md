@@ -17,7 +17,7 @@ The corrected pipeline starts from upstream commit `dc2d3df799ec11d5d6111a5d8986
 | PBI gaps | Check their signs before squaring. Reject infeasible waiting intervals rather than clamping them to zero. |
 | PBI execution | Collect all arms due at one epoch, check overdue batches against the pre-injection state, then inject all accepted per-arm batches before the next genuine pull. Use actual final batch sizes and retain infeasible trials. |
 | Randomness | Explicit SplitMix64/Box-Muller streams, paired arm-wise observations, recorded seeds, and deterministic task collection. |
-| Reporting | 20 repetitions per horizon for each learner. Both panels use the same endpoint runs at 11 varying horizons up to 1,000,000, with linear axes and sample standard deviations. |
+| Reporting | 20 repetitions per horizon for each learner. Both panels use the same endpoint runs at 12 varying horizons from K to 1,000,000, with linear axes and sample standard deviations. |
 
 ## PBI interpretation
 

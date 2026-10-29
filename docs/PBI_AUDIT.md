@@ -48,7 +48,7 @@ clang++ -std=c++17 -O3 -pthread experiments/audit_pbi.cpp -o build/audit_pbi
 
 ## Finite-grid reward calibration
 
-The shared integer reward is searched in order -1, -2, ... . The grid has two learners, 11 horizons, 20 fixed repetitions and two attacks (SBI/PBI): 880 runs per fully evaluated candidate. Each rejected integer has one failure witness; screening stops early on that witness. A passing candidate must finish all nine non-target arms with zero infeasible schedules and zero genuine pulls of an arm after its first injection, including between batches.
+The shared integer reward is searched in order -1, -2, ... . The calibration grid has two learners, 11 nontrivial horizons, 20 fixed repetitions and two attacks (SBI/PBI): 880 runs per fully evaluated candidate. Each rejected integer has one failure witness; screening stops early on that witness. A passing candidate must finish all nine non-target arms with zero infeasible schedules and zero genuine pulls of an arm after its first injection, including between batches.
 
 The first passing integer is -70. All integers -1 through -69 fail. Repeating the search after the simultaneous-batch correction gives the same result. This is calibration on the publication seeds, not a mathematical guarantee or an independent estimate of success probability. Both plotted metrics still use the same 20 runs at each varying horizon; LI and the heuristic remain in the final four-method comparison.
 
@@ -58,3 +58,5 @@ clang++ -std=c++17 -O3 -pthread experiments/search_reward.cpp -o build/search_re
 ```
 
 Failure witnesses and first-trigger calculations are recorded in `results/reward-search/`; the complete calibrated run is in `results/horizon/`.
+
+The plotted grid additionally includes T = K = 10. This endpoint contains initialization only: every method has zero injection cost and target-arm ratio 1/K. It imposes no additional condition on the calibrated reward.

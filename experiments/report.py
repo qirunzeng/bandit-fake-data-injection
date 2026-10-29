@@ -105,8 +105,15 @@ def figure(name, kind, values):
         options.extend([r"title={Target-arm ratio}",
                         r"ymin=0, ymax=1.04, ytick={0,0.25,0.5,0.75,1}, scaled y ticks=false"])
     else:
+        low = min(r[m + "_low"] for r in values for m in METHODS)
+        span = max(1, peak - low)
+        step = 10 ** math.floor(math.log10(span))
+        if span / step < 3:
+            step /= 2
+        bottom = max(0, math.floor((low - 0.03 * span) / step) * step)
+        top = math.ceil((peak + 0.03 * span) / step) * step
         options.extend([r"title={Attack cost $C^F$}",
-                        f"ymin=0, ymax={max(1, peak * 1.1):.10g}", r"scaled y ticks=true"])
+                        f"ymin={bottom:.10g}, ymax={top:.10g}", r"scaled y ticks=true"])
     lines = ["% Generated from corrected experiments; markers are measured points.",
              r"\begin{tikzpicture}", r"\begin{axis}[fdi axis," + ",\n    ".join(options) + "]"]
     for method in METHODS:
@@ -195,6 +202,7 @@ def export(source, output):
         for path in target.glob(name + "*.dat"): path.unlink()
     fields = ["x"] + [k for m in METHODS for k in (m, m + "_low", m + "_high")]
     provenance = dict(manifest)
+    provenance["exporter_sha256"] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     provenance["plots"] = {}
     for learner in ("ucb", "ts"):
         for kind in ("horizon", "ratio"):

@@ -5,15 +5,15 @@
   "upstream_commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
   "mode": "full",
   "source_sha256": {
-    "experiments/simulator.cpp": "010465cb512cbcab83f6565e11a0152b885b4f8dad322824f4e73d016665608b",
+    "experiments/simulator.cpp": "d14aa435bb517294299c05f3dd2aa38069c207f6834c69435d2afe85f2c58b8d",
     "experiments/prepare_data.py": "1f63ed9e04b79f292452b0fcb9ff62202ad95ca60f94d9a62ea3f180640739a2",
     "experiments/run.py": "d527a6bf47cffa39cd741b44ffb5aae2c98961a1d63681fe4aafb0ea02c5e740",
-    "experiments/report.py": "a8075085f53fe77fcad4b7e46ea7df23f3eda2555c70b5e824feaff65b5e8a89",
+    "experiments/report.py": "b8499a28b7c3fa5e15db74abba445183c03b507ffffd79c524ffbaeea759136e",
     "experiments/search_reward.cpp": "22a928269a58a374a0ea4df7eb1bc442e85996a500d05f33e709a15090af9fb8",
     "experiments/audit_pbi.cpp": "cd4c9bdd7990035847708ab81447f7e884220b0e24c40cc1ea9bf3e1f50c6924"
   },
   "result_sha256": {
-    "runs.csv": "bd3aa545e91a2c1e6635c7cdcf659e1b534735d6b283a4c22fbb98754bc73c5f",
+    "runs.csv": "942da62bc3393eada3b62ace0e92aab09e21ec7920e47155df0e20bc4fca26b8",
     "trajectories.csv": "160db7cb257948ffdacd95e5675501c92215c1b147d26ff3f5ae803c08a177ec"
   },
   "data": {
@@ -28,7 +28,7 @@
     ],
     "extraction": "Column means of the binary matrix; genuine rewards are sampled as Bernoulli(p)."
   },
-  "rows": 1760,
+  "rows": 1920,
   "configuration": {
     "ucb": {
       "trials": 20,
@@ -36,6 +36,7 @@
         0.5
       ],
       "horizons": [
+        10,
         10000,
         100000,
         200000,
@@ -64,6 +65,7 @@
         0.05
       ],
       "horizons": [
+        10,
         10000,
         100000,
         200000,
@@ -101,9 +103,10 @@
     "heuristic": "Randomly place SBI's realized per-arm fake budget after initialization; exactly match counts and true-mean cost.",
     "li": "Unbounded reference; not subject to the bounded methods' reward interval."
   },
+  "exporter_sha256": "b8499a28b7c3fa5e15db74abba445183c03b507ffffd79c524ffbaeea759136e",
   "plots": {
     "ucb-cost-horizon": {
-      "rows": 11,
+      "rows": 12,
       "trials": 20,
       "interpolation": "Straight segments between recorded points; no extrapolation.",
       "markers": "Every independently simulated horizon endpoint.",
@@ -112,7 +115,7 @@
       "horizon_axis": "linear"
     },
     "ucb-selection-ratio": {
-      "rows": 11,
+      "rows": 12,
       "trials": 20,
       "interpolation": "Straight segments between recorded points; no extrapolation.",
       "markers": "Every independently simulated horizon endpoint.",
@@ -121,7 +124,7 @@
       "horizon_axis": "linear"
     },
     "ts-cost-horizon": {
-      "rows": 11,
+      "rows": 12,
       "trials": 20,
       "interpolation": "Straight segments between recorded points; no extrapolation.",
       "markers": "Every independently simulated horizon endpoint.",
@@ -130,7 +133,7 @@
       "horizon_axis": "linear"
     },
     "ts-selection-ratio": {
-      "rows": 11,
+      "rows": 12,
       "trials": 20,
       "interpolation": "Straight segments between recorded points; no extrapolation.",
       "markers": "Every independently simulated horizon endpoint.",
