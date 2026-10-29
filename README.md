@@ -13,7 +13,7 @@ python3 experiments/run.py --threads 6
 python3 experiments/report.py --output results/report
 ```
 
-The first command builds the simulator, runs its correctness checks, verifies the supplied MovieLens matrix, and generates raw results. The second independently audits the sample counts and costs before exporting four TikZ figures and three tables. Attack-parameter sweeps remain in the raw results; the main figures show cost versus horizon and target-arm selection.
+The first command builds and checks the simulator, then runs 20 repetitions at each of 11 horizons: 10,000 and 100,000 to 1,000,000 in steps of 100,000. The second audits the counts and costs and exports the figures. Both panels use the same run endpoints at each horizon: final attack cost and final target-arm selection ratio. Both horizontal axes are linear. Different horizons are simulated separately because the attack threshold depends on T; neither panel uses prefixes of a fixed-horizon run.
 
 Optional vector PDF export requires pdfLaTeX with TikZ and PGFPlots:
 
@@ -21,7 +21,7 @@ Optional vector PDF export requires pdfLaTeX with TikZ and PGFPlots:
 python3 experiments/build_figures.py --report results/report
 ```
 
-The committed full run is in `results/corrected/`. Its manifest records source hashes, input-data provenance, result hashes, and the experiment protocol.
+The current publication run is in `results/horizon/`; the earlier broad sweeps remain in `results/corrected/`. Its manifest records source hashes, input-data provenance, result hashes, and the experiment protocol.
 
 ## Main settings
 
@@ -34,11 +34,12 @@ The committed full run is in `results/corrected/`. Its manifest records source h
 | Default attack parameter | 0.2 | 1.0 |
 | Shared bounded fake reward | -64 | -64 |
 | PBI maximum batch size | 10 | 10 |
-| Main trajectory horizon | 100,000 records | 100,000 records |
+| Maximum horizon | 1,000,000 records | 1,000,000 records |
+| Horizon settings | 11 | 11 |
 
 Both genuine and fake samples consume the same horizon. Every fake sample updates the same counts and empirical means used by the learner. Attack cost is always the sum of absolute deviations from the **true arm mean**; the number of injected samples is recorded separately.
 
-The fixed injection interval is -64 to 1 for every bounded method. This is a broad suppression stress setting, not a binary-feedback validity constraint. Unit-range injection experiments are included separately. LI remains an unbounded reference.
+The fixed injection interval is -64 to 1 for every bounded method. This is a broad suppression stress setting, not a binary-feedback validity constraint. Unit-range injection experiments are retained in the archived broad sweeps. LI remains an unbounded reference.
 
 ## Methods and feasibility
 
@@ -47,18 +48,19 @@ The fixed injection interval is -64 to 1 for every bounded method. This is a bro
 - **LI:** inject one unrestricted sample per triggered non-target arm.
 - **Matched-budget heuristic:** supply the actual per-arm SBI budget to a random-timing control. Counts and true-mean costs match SBI exactly; target-arm selections need not match. This control uses the paired SBI run's budget rather than estimating a budget online.
 
-At the main setting, each arm's required injection fits into one PBI batch. SBI and PBI therefore coincide there. The batch and reward sensitivity experiments report where the periodic certificate becomes infeasible; the main comparison does not establish a benefit from multiple periodic interventions. The checks do not resolve the outstanding mathematical conditions of the general PBI theorem.
+At T = 1,000,000, UCB PBI has infeasible plans in 2 of 20 trials; these trials remain in the averages. TS PBI still fits in one batch per arm and coincides with SBI. The archived batch and reward sensitivity experiments provide additional feasibility checks; coincident curves do not establish a benefit from periodic interventions. The checks do not resolve the outstanding mathematical conditions of the general PBI theorem.
 
 ## Results and additional checks
 
-The full run contains **7,360 method runs**. At 100,000 records, mean SBI/PBI target-arm ratios are approximately **97.36% for UCB** and **99.88% for TS**. Failures and infeasible trials are included. The heuristic's low target ratios despite identical costs demonstrate the role of timing.
+The current run contains **1,760 method runs** (2 learners × 11 horizons × 20 trials × 4 methods). At 1,000,000 records, UCB target-arm ratios are **99.68% for SBI** and **89.72% for PBI**; TS SBI/PBI both reach **99.99%**. Infeasible trials are included. The heuristic has the same endpoint cost as SBI but much lower target-arm ratios.
 
 Recorded outputs include:
 
 - `runs.csv`: seeds, parameters, costs, target ratios, feasibility flags, and per-arm genuine/fake/prescribed counts.
-- `trajectories.csv`: measured target-arm ratio checkpoints.
+- `trajectories.csv`: empty apart from its header for the endpoint-only experiment; no separate trajectory runs are needed.
 - `manifest.json`: input, code, and result hashes.
-- Exported `summary.csv` and sensitivity tables: sample counts, costs, and feasibility alongside target-arm ratios.
+- Exported `summary.csv`: sample counts, costs, feasibility, and target-arm ratios at every horizon.
+- Archived sensitivity results remain in `results/corrected/`; regenerate them with `--sweeps --output results/corrected`.
 
 To run a small pilot or an explicit parameter probe:
 

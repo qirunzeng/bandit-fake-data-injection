@@ -2,7 +2,7 @@
 """Audit corrected runs and export measured curves, tables, and TikZ figures.
 
 Only Python's standard library is required. Run from the repository root:
-python3 experiments/report.py --source results/corrected --output results/report
+python3 experiments/report.py --source results/horizon --output results/report
 To update the manuscript, set --output to the manuscript directory.
 """
 import argparse
@@ -91,19 +91,16 @@ def series(rows, column, x_column="x"):
 
 def figure(name, kind, values):
     peak = max(r[m + "_high"] for r in values for m in METHODS)
+    maximum = max(r["x"] for r in values)
+    options = [r"xlabel={Horizon $T$ ($10^6$)}",
+               f"xmin=0, xmax={maximum:.17g}",
+               r"xtick={0,250000,500000,750000,1000000}, xticklabels={0,0.25,0.5,0.75,1}, scaled x ticks=false"]
     if kind == "ratio":
-        options = [r"xlabel={Record index $t$ ($10^4$)}, title={Target-arm ratio}",
-                   r"xmin=0, xmax=100000, xtick={0,25000,50000,75000,100000}",
-                   r"xticklabels={0,2.5,5,7.5,10}, scaled x ticks=false",
-                   r"ymin=0, ymax=1.04, ytick={0,0.25,0.5,0.75,1}, scaled y ticks=false"]
+        options.extend([r"title={Target-arm ratio}",
+                        r"ymin=0, ymax=1.04, ytick={0,0.25,0.5,0.75,1}, scaled y ticks=false"])
     else:
-        if kind == "delta":
-            options = [r"xlabel={$\delta_0$}, title={Attack cost $C^F$}",
-                       r"xmin=0.1, xmax=0.5, xtick={0.1,0.3,0.5}"]
-        else:
-            options = [r"xlabel={Horizon $T$}, title={Attack cost $C^F$}",
-                       r"xmode=log, xmin=10, xmax=10000000, xtick={10,1000,100000,10000000}"]
-        options.extend([f"ymin=0, ymax={max(1, peak * 1.1):.10g}", r"scaled y ticks=true"])
+        options.extend([r"title={Attack cost $C^F$}",
+                        f"ymin=0, ymax={max(1, peak * 1.1):.10g}", r"scaled y ticks=true"])
     lines = ["% Generated from corrected experiments; markers are measured points.",
              r"\begin{tikzpicture}", r"\begin{axis}[fdi axis," + ",\n    ".join(options) + "]"]
     for method in METHODS:
@@ -135,8 +132,10 @@ def summaries(runs, target):
     tex = [r"\begin{tabular}{llrrrr}", r"\toprule",
            r"Learner & Method & $N^F$ & $C^F$ & Target (\%) & Infeasible trials \\", r"\midrule"]
     for learner in ("ucb", "ts"):
-        for method in ("sbi", "pbi", "li", "heuristic"):
-            s = next(s for s in summaries if s["learner"] == learner and s["grid"] == "ratio" and s["method"] == method)
+        endpoint = max(float(r["T"]) for r in runs if r["grid"] == "horizon" and r["learner"] == learner)
+        for method in METHODS:
+            s = next(s for s in summaries if s["learner"] == learner and s["grid"] == "horizon"
+                     and s["x"] == endpoint and s["method"] == method)
             name = "Heuristic" if method == "heuristic" else method.upper()
             tex.append(f"{learner.upper()} & {name} & {s['mean_fakes']:.1f} & {s['mean_cost']:.1f} & "
                        + f"{100*s['mean_ratio']:.2f} & {s['infeasible_trials']}/{s['trials']}" + r" \\")
@@ -166,7 +165,17 @@ def summaries(runs, target):
 
 
 def export(source, output):
-    runs, traces, manifest = load_results(source)
+    runs, _, manifest = load_results(source)
+    horizon_runs = [r for r in runs if r["grid"] == "horizon"]
+    if not horizon_runs:
+        raise ValueError("Publication figures require varying-horizon endpoint runs")
+    horizons = {int(r["T"]) for r in horizon_runs}
+    expected = {(learner, horizon, trial, method)
+                for learner in ("ucb", "ts") for horizon in horizons
+                for trial in range(20) for method in METHODS}
+    actual = {(r["learner"], int(r["T"]), int(r["trial"]), r["method"]) for r in horizon_runs}
+    if actual != expected or len(horizon_runs) != len(expected):
+        raise ValueError("Both panels require the same complete grid of 20 trials and four methods")
     fig = output / "fig"; target = fig / "data"; target.mkdir(parents=True, exist_ok=True)
     # Parameter sweeps remain in raw results and summary tables, not the main figures.
     for learner in ("ucb", "ts"):
@@ -181,20 +190,11 @@ def export(source, output):
     for learner in ("ucb", "ts"):
         for kind in ("horizon", "ratio"):
             name = learner + "-" + ("selection-ratio" if kind == "ratio" else "cost-" + kind)
-            rows = [r for r in (traces if kind == "ratio" else runs) if r["learner"] == learner
-                    and (kind == "ratio" or r["grid"] == kind)]
-            values = series(rows, "ratio" if kind == "ratio" else "cost", "t" if kind == "ratio" else "x")
+            rows = [r for r in runs if r["learner"] == learner and r["grid"] == "horizon"]
+            values = series(rows, "ratio" if kind == "ratio" else "cost", "T")
             table(target / (name + ".dat"), values, fields)
-            if kind == "ratio":
-                positions = [5000 + 10000 * j for j in range(10)]
-                markers = [min(values, key=lambda r: abs(r["x"] - x)) for x in positions]
-            elif kind == "horizon":
-                positions = [math.exp(math.log(values[0]["x"]) + j / 9 *
-                             (math.log(values[-1]["x"]) - math.log(values[0]["x"]))) for j in range(10)]
-                markers = [min(values, key=lambda r: abs(math.log(r["x"]) - math.log(x))) for x in positions]
-            else:
-                indices = sorted({round(j * (len(values) - 1) / 9) for j in range(10)})
-                markers = [values[j] for j in indices]
+            # Every plotted marker is an independently simulated horizon endpoint.
+            markers = values
             table(target / (name + "-marks.dat"), markers, fields)
             bands = [{"x": r["x"], **{m: r[m + "_low"] for m in METHODS}} for r in values]
             bands += [{"x": r["x"], **{m: r[m + "_high"] for m in METHODS}} for r in reversed(values)]
@@ -203,9 +203,10 @@ def export(source, output):
             trials = len({r["trial"] for r in rows})
             provenance["plots"][name] = {"rows": len(values), "trials": trials,
                 "interpolation": "Straight segments between recorded points; no extrapolation.",
-                "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+                "markers": "Every independently simulated horizon endpoint.",
+                "source": "runs.csv: same learner, horizon, trial, and method for both panels",
                 "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
-                "horizon_axis": "logarithmic" if kind == "horizon" else "linear"}
+                "horizon_axis": "linear"}
     summaries(runs, target)
     (target / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
     print(f"Exported four corrected figures and three summary tables to {fig}")
@@ -213,8 +214,8 @@ def export(source, output):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    local_clone = ROOT / "experiments/bandit-fake-data-injection/results/corrected"
-    parser.add_argument("--source", type=Path, default=local_clone if local_clone.exists() else ROOT / "results/corrected")
+    local_clone = ROOT / "experiments/bandit-fake-data-injection/results/horizon"
+    parser.add_argument("--source", type=Path, default=local_clone if local_clone.exists() else ROOT / "results/horizon")
     parser.add_argument("--output", type=Path, default=ROOT if (ROOT / "0-main.tex").exists() else ROOT / "results/report")
     parser.add_argument("--audit-only", action="store_true", help="Validate runs without exporting publication figures")
     arguments = parser.parse_args()

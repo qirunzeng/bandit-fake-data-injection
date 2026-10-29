@@ -1,8 +1,10 @@
 % Generated from corrected experiments; markers are measured points.
 \begin{tikzpicture}
-\begin{axis}[fdi axis,xlabel={Horizon $T$}, title={Attack cost $C^F$},
-    xmode=log, xmin=10, xmax=10000000, xtick={10,1000,100000,10000000},
-    ymin=0, ymax=5326.191313,
+\begin{axis}[fdi axis,xlabel={Horizon $T$ ($10^6$)},
+    xmin=0, xmax=1000000,
+    xtick={0,250000,500000,750000,1000000}, xticklabels={0,0.25,0.5,0.75,1}, scaled x ticks=false,
+    title={Attack cost $C^F$},
+    ymin=0, ymax=4726.59453,
     scaled y ticks=true]
 \addplot[fdi sbi band, forget plot] table[x=x,y=sbi] {fig/data/ucb-cost-horizon-bands.dat} \closedcycle;
 \addplot[fdi pbi band, forget plot] table[x=x,y=pbi] {fig/data/ucb-cost-horizon-bands.dat} \closedcycle;

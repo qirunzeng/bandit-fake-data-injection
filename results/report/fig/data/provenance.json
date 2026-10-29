@@ -1,18 +1,18 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "repository": "qirunzeng/bandit-fake-data-injection",
   "upstream_repository": "richardhoff88/online_learning_torank",
   "upstream_commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
   "mode": "full",
   "source_sha256": {
-    "experiments/simulator.cpp": "960f2081b082780163766d22874c3cbabb8eb7a223d6b1f761597d4f4021df38",
+    "experiments/simulator.cpp": "409a91d7b9654648ce500f59f4692f28c0daf364e4f8a09f23a61343c3de7a8e",
     "experiments/prepare_data.py": "1f63ed9e04b79f292452b0fcb9ff62202ad95ca60f94d9a62ea3f180640739a2",
-    "experiments/run.py": "94aab3933752f253f2b2a91bb21aeaa09f23ef836e9f460db892999767d29922",
-    "experiments/report.py": "31e5ac1e0b86b002897a7ae723e0976ffa586bb66395640412db2d60f7ee4eec"
+    "experiments/run.py": "5b346a48e4a76ec76c969e70b6c66e656685bf4a5943c49e544c6e37a1e704db",
+    "experiments/report.py": "9af97d15a1ebaa44175be180f74e39fcb84364439a88555a807c737bcc5757d2"
   },
   "result_sha256": {
-    "runs.csv": "6d56d3bede741acd92d1ea7e48710b2629ab7d705a27a4c9ac2b8445c9a2e8a1",
-    "trajectories.csv": "0721601a9d6274058ebf7f966f0f3078089a8182857deb841bc01f3f142dcb73"
+    "runs.csv": "e52022313d7708ba96cf3b345d8a9aae7efd1ea4ddfefad083b23f1a106262ed",
+    "trajectories.csv": "160db7cb257948ffdacd95e5675501c92215c1b147d26ff3f5ae803c08a177ec"
   },
   "data": {
     "repository": "richardhoff88/online_learning_torank",
@@ -26,7 +26,7 @@
     ],
     "extraction": "Column means of the binary matrix; genuine rewards are sampled as Bernoulli(p)."
   },
-  "rows": 7360,
+  "rows": 1760,
   "configuration": {
     "ucb": {
       "trials": 20,
@@ -34,39 +34,26 @@
         0.5
       ],
       "horizons": [
-        10,
-        46,
-        215,
-        1000,
-        4641,
-        21544,
+        10000,
         100000,
-        464158,
-        1000000,
-        2154434,
-        4000000,
-        6000000,
-        8000000,
-        10000000
+        200000,
+        300000,
+        400000,
+        500000,
+        600000,
+        700000,
+        800000,
+        900000,
+        1000000
       ],
       "delta": [
         0.05
       ],
       "fake_lower_bounds": [
-        -256.0,
-        -128.0,
-        -96.0,
-        -64.0,
-        -36.0,
-        -16.0,
-        0.0
+        -64.0
       ],
       "batch_sizes": [
-        1,
-        5,
-        10,
-        20,
-        50
+        10
       ]
     },
     "ts": {
@@ -75,42 +62,31 @@
         0.05
       ],
       "horizons": [
-        10,
-        46,
-        215,
-        1000,
-        4641,
-        21544,
+        10000,
         100000,
-        464158,
-        2154434,
-        4000000,
-        6000000,
-        8000000,
-        10000000
+        200000,
+        300000,
+        400000,
+        500000,
+        600000,
+        700000,
+        800000,
+        900000,
+        1000000
       ],
       "delta": [
         0.05
       ],
       "fake_lower_bounds": [
-        -256.0,
-        -128.0,
-        -96.0,
-        -64.0,
-        -36.0,
-        -16.0,
-        0.0
+        -64.0
       ],
       "batch_sizes": [
-        1,
-        5,
-        10,
-        20,
-        50
+        10
       ]
     }
   },
   "protocol": {
+    "curves": "Cost and target ratio use the same endpoint runs at each varying horizon T.",
     "clock": "Each genuine or injected sample consumes one of T records, including initialization.",
     "cost": "Sum of abs(fake_reward - true_arm_mean), for every processed fake record.",
     "ucb_rewards": "Bernoulli draws at the selected MovieLens column mean.",
@@ -124,34 +100,38 @@
   },
   "plots": {
     "ucb-cost-horizon": {
-      "rows": 13,
+      "rows": 11,
       "trials": 20,
       "interpolation": "Straight segments between recorded points; no extrapolation.",
-      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "markers": "Every independently simulated horizon endpoint.",
+      "source": "runs.csv: same learner, horizon, trial, and method for both panels",
       "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
-      "horizon_axis": "logarithmic"
+      "horizon_axis": "linear"
     },
     "ucb-selection-ratio": {
-      "rows": 1099,
+      "rows": 11,
       "trials": 20,
       "interpolation": "Straight segments between recorded points; no extrapolation.",
-      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "markers": "Every independently simulated horizon endpoint.",
+      "source": "runs.csv: same learner, horizon, trial, and method for both panels",
       "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
       "horizon_axis": "linear"
     },
     "ts-cost-horizon": {
-      "rows": 13,
+      "rows": 11,
       "trials": 20,
       "interpolation": "Straight segments between recorded points; no extrapolation.",
-      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "markers": "Every independently simulated horizon endpoint.",
+      "source": "runs.csv: same learner, horizon, trial, and method for both panels",
       "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
-      "horizon_axis": "logarithmic"
+      "horizon_axis": "linear"
     },
     "ts-selection-ratio": {
-      "rows": 1099,
+      "rows": 11,
       "trials": 20,
       "interpolation": "Straight segments between recorded points; no extrapolation.",
-      "markers": "Recorded sweep points or recorded trajectory checkpoints.",
+      "markers": "Every independently simulated horizon endpoint.",
+      "source": "runs.csv: same learner, horizon, trial, and method for both panels",
       "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
       "horizon_axis": "linear"
     }

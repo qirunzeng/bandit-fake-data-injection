@@ -1,8 +1,9 @@
 % Generated from corrected experiments; markers are measured points.
 \begin{tikzpicture}
-\begin{axis}[fdi axis,xlabel={Record index $t$ ($10^4$)}, title={Target-arm ratio},
-    xmin=0, xmax=100000, xtick={0,25000,50000,75000,100000},
-    xticklabels={0,2.5,5,7.5,10}, scaled x ticks=false,
+\begin{axis}[fdi axis,xlabel={Horizon $T$ ($10^6$)},
+    xmin=0, xmax=1000000,
+    xtick={0,250000,500000,750000,1000000}, xticklabels={0,0.25,0.5,0.75,1}, scaled x ticks=false,
+    title={Target-arm ratio},
     ymin=0, ymax=1.04, ytick={0,0.25,0.5,0.75,1}, scaled y ticks=false]
 \addplot[fdi sbi band, forget plot] table[x=x,y=sbi] {fig/data/ucb-selection-ratio-bands.dat} \closedcycle;
 \addplot[fdi pbi band, forget plot] table[x=x,y=pbi] {fig/data/ucb-selection-ratio-bands.dat} \closedcycle;

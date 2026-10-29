@@ -294,8 +294,8 @@ void self_test() {
 
 int main(int argc, char** argv) {
     try {
-        std::string means_path = "experiments/data/movielens-means.csv", output = "results/corrected";
-        int threads = 6, default_batch = 10; bool quick = false, benchmark = false, ratio_only = false;
+        std::string means_path = "experiments/data/movielens-means.csv", output = "results/horizon";
+        int threads = 6, default_batch = 10; bool quick = false, benchmark = false, ratio_only = false, sweeps = false;
         double fake_lower = -64;
         uint64_t seed_base = 3141592653ULL;
         for (int a = 1; a < argc; ++a) {
@@ -304,6 +304,7 @@ int main(int argc, char** argv) {
             if (arg == "--quick") quick = true;
             else if (arg == "--benchmark") benchmark = true;
             else if (arg == "--ratio-only") ratio_only = true;
+            else if (arg == "--sweeps") sweeps = true;
             else if (arg == "--means") means_path = argv[++a];
             else if (arg == "--output") output = argv[++a];
             else if (arg == "--threads") threads = std::stoi(argv[++a]);
@@ -338,6 +339,14 @@ int main(int argc, char** argv) {
             double base = learner == "ucb" ? 0.2 : 1.0;
             if (benchmark) { add("benchmark",1000000,1000000,base); continue; }
             if (ratio_only) { add("ratio",100000,100000,base); continue; }
+            if (!sweeps) {
+                const std::vector<long long> shared_horizons = quick
+                    ? std::vector<long long>{100,1000,10000}
+                    : std::vector<long long>{10000,100000,200000,300000,400000,500000,
+                                            600000,700000,800000,900000,1000000};
+                for (long long h : shared_horizons) add("horizon",double(h),h,base);
+                continue;
+            }
             int points = quick ? 3 : 20;
             for (int j = 0; j < points; ++j) {
                 double d0 = 0.1 + 0.4 * j / (points - 1);

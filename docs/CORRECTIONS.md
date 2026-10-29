@@ -17,13 +17,13 @@ The corrected pipeline starts from upstream commit `dc2d3df799ec11d5d6111a5d8986
 | PBI gaps | Check their signs before squaring. Reject infeasible waiting intervals rather than clamping them to zero. |
 | PBI execution | Serialize batches, use the actual final batch size, and recertify a delayed batch. Keep all infeasible trials. |
 | Randomness | Explicit SplitMix64/Box-Muller streams, paired arm-wise observations, recorded seeds, and deterministic task collection. |
-| Reporting | 20 repetitions for each learner, sample standard deviations, exact measured markers, true counts and costs. |
+| Reporting | 20 repetitions per horizon for each learner. Both panels use the same endpoint runs at 11 varying horizons up to 1,000,000, with linear axes and sample standard deviations. |
 
 ## PBI interpretation
 
 The implementation computes a sufficient scheduling certificate. Rejecting a plan means this certificate could not justify the proposed schedule; it does not prove that every possible periodic attack must fail. Rechecking delayed batches is an implementation safeguard under the global record stream. This behavior is documented as certificate-checked PBI, rather than claiming the original theorem holds without additional conditions.
 
-At fake reward -64 and batch size 10, the per-arm budgets in the main endpoint experiments fit in one batch. Coincident SBI/PBI curves in that setting do not establish a periodic-injection advantage. The batch-size and reward-strength sweeps include smaller, infeasible settings.
+At fake reward -64 and batch size 10, TS per-arm budgets fit in one batch; coincident SBI/PBI curves do not establish a periodic-injection advantage. UCB at T = 1,000,000 has infeasible PBI plans in 2 of 20 trials, lowering the mean target-arm ratio to 89.72% versus SBI's 99.68%. The archived batch-size and reward-strength sweeps include additional infeasible settings.
 
 ## Scope of the reward range
 

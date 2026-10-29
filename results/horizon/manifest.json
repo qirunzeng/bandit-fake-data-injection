@@ -1,0 +1,101 @@
+{
+  "schema_version": 2,
+  "repository": "qirunzeng/bandit-fake-data-injection",
+  "upstream_repository": "richardhoff88/online_learning_torank",
+  "upstream_commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
+  "mode": "full",
+  "source_sha256": {
+    "experiments/simulator.cpp": "409a91d7b9654648ce500f59f4692f28c0daf364e4f8a09f23a61343c3de7a8e",
+    "experiments/prepare_data.py": "1f63ed9e04b79f292452b0fcb9ff62202ad95ca60f94d9a62ea3f180640739a2",
+    "experiments/run.py": "5b346a48e4a76ec76c969e70b6c66e656685bf4a5943c49e544c6e37a1e704db",
+    "experiments/report.py": "9af97d15a1ebaa44175be180f74e39fcb84364439a88555a807c737bcc5757d2"
+  },
+  "result_sha256": {
+    "runs.csv": "e52022313d7708ba96cf3b345d8a9aae7efd1ea4ddfefad083b23f1a106262ed",
+    "trajectories.csv": "160db7cb257948ffdacd95e5675501c92215c1b147d26ff3f5ae803c08a177ec"
+  },
+  "data": {
+    "repository": "richardhoff88/online_learning_torank",
+    "commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
+    "path": "dataset/movielens.npy",
+    "git_blob_sha1": "2ea89402667bebf82affdd724d854fc081cba877",
+    "sha256": "a7edf29a584675b002359825904341530a79dd048d3af1ae666509e53e2b2822",
+    "shape": [
+      1000,
+      1000
+    ],
+    "extraction": "Column means of the binary matrix; genuine rewards are sampled as Bernoulli(p)."
+  },
+  "rows": 1760,
+  "configuration": {
+    "ucb": {
+      "trials": 20,
+      "sigma": [
+        0.5
+      ],
+      "horizons": [
+        10000,
+        100000,
+        200000,
+        300000,
+        400000,
+        500000,
+        600000,
+        700000,
+        800000,
+        900000,
+        1000000
+      ],
+      "delta": [
+        0.05
+      ],
+      "fake_lower_bounds": [
+        -64.0
+      ],
+      "batch_sizes": [
+        10
+      ]
+    },
+    "ts": {
+      "trials": 20,
+      "sigma": [
+        0.05
+      ],
+      "horizons": [
+        10000,
+        100000,
+        200000,
+        300000,
+        400000,
+        500000,
+        600000,
+        700000,
+        800000,
+        900000,
+        1000000
+      ],
+      "delta": [
+        0.05
+      ],
+      "fake_lower_bounds": [
+        -64.0
+      ],
+      "batch_sizes": [
+        10
+      ]
+    }
+  },
+  "protocol": {
+    "curves": "Cost and target ratio use the same endpoint runs at each varying horizon T.",
+    "clock": "Each genuine or injected sample consumes one of T records, including initialization.",
+    "cost": "Sum of abs(fake_reward - true_arm_mean), for every processed fake record.",
+    "ucb_rewards": "Bernoulli draws at the selected MovieLens column mean.",
+    "ucb_index": "empirical_mean + 3*sigma*sqrt(log(next_record)/sample_count), sigma=0.5.",
+    "ts_rewards": "Gaussian(mean, 0.05^2) throughout, including initialization.",
+    "ts_posterior": "Independent Gaussian(empirical_mean, 1/sample_count).",
+    "randomness": "SplitMix64 and Box-Muller; arm-wise reward streams and posterior streams are paired across methods.",
+    "pbi": "Reject nonpositive signed gaps or cooldowns below one; record infeasible arms without excluding trials. Recertify delayed batches before execution.",
+    "heuristic": "Randomly place SBI's realized per-arm fake budget after initialization; exactly match counts and true-mean cost.",
+    "li": "Unbounded reference; not subject to the bounded methods' reward interval."
+  }
+}
