@@ -13,7 +13,7 @@ python3 experiments/run.py --threads 6
 python3 experiments/report.py --output results/report
 ```
 
-The first command builds and checks the simulator, then runs 20 repetitions at each of 12 horizons: K = 10, 10,000, and 100,000 to 1,000,000 in steps of 100,000. The second audits the counts and costs and exports the figures. Both panels use the same run endpoints at each horizon: final attack cost and final target-arm selection ratio. Both horizontal axes are linear. Different horizons are simulated separately because the attack threshold depends on T; neither panel uses prefixes of a fixed-horizon run.
+The first command builds and checks the simulator, then runs 20 repetitions at each of 112 horizons: K = 10, 100, 500, then 1,000 to 9,000 in steps of 1,000, and 10,000 to 1,000,000 in steps of 10,000. All measured points enter the curves; approximately 11 symbols are shown for readability. The second audits the counts and costs and exports the figures. Both panels use the same run endpoints at each horizon: final attack cost and final target-arm selection ratio. Both horizontal axes are linear. Straight segments connect measurements; no spline smoothing is used. Integer attack thresholds can produce genuine plateaus and jumps. Different horizons are simulated separately because the attack threshold depends on T; neither panel uses prefixes of a fixed-horizon run.
 
 Optional vector PDF export requires pdfLaTeX with TikZ and PGFPlots:
 
@@ -35,7 +35,7 @@ The current publication run is in `results/horizon/`; the earlier broad sweeps r
 | Shared bounded fake reward | -70 | -70 |
 | PBI maximum batch size | 10 | 10 |
 | Maximum horizon | 1,000,000 records | 1,000,000 records |
-| Horizon settings | 12 | 12 |
+| Horizon settings | 112 | 112 |
 
 Both genuine and fake samples consume the same horizon. Every fake sample updates the same counts and empirical means used by the learner. Attack cost is always the sum of absolute deviations from the **true arm mean**; the number of injected samples is recorded separately.
 
@@ -48,11 +48,11 @@ The fixed injection interval is -70 to 1 for every bounded method. This is a bro
 - **LI:** inject one unrestricted sample per triggered non-target arm.
 - **Matched-budget heuristic:** supply the actual per-arm SBI budget to a random-timing control. Counts and true-mean costs match SBI exactly; target-arm selections need not match. This control uses the paired SBI run's budget rather than estimating a budget online.
 
-The shared reward -70 is the least negative **integer** passing the declared finite calibration grid: all 880 SBI/PBI runs complete the nine non-target arms with no infeasible schedules and no subsequent pulls, including between batches. Every integer from -1 through -69 has a recorded failure witness. The additional T = K point contains only initialization, so its injection count and cost are zero and it adds no calibration constraint. This calibrates on the displayed seeds; it is not a universal or out-of-sample success guarantee. See [the scheduling audit](docs/PBI_AUDIT.md) and `results/reward-search/`.
+The shared reward -70 is the least negative **integer** passing the original 11-horizon calibration grid: all 880 SBI/PBI runs complete the nine non-target arms with no infeasible schedules and no subsequent pulls, including between batches. Every integer from -1 through -69 has a recorded failure witness. The additional T = K point contains only initialization, so its injection count and cost are zero and it adds no calibration constraint. The denser plotting grid retains this calibrated reward. Calibration uses the displayed seeds; it is not a universal or out-of-sample success guarantee. See [the scheduling audit](docs/PBI_AUDIT.md) and `results/reward-search/`.
 
 ## Results and additional checks
 
-The current run contains **1,920 method runs** (2 learners × 12 horizons × 20 trials × 4 methods). At 1,000,000 records, UCB target-arm ratios are **99.68% for both SBI and PBI**; TS SBI/PBI both reach **99.99%**. Infeasible trials are included. The heuristic has the same endpoint cost as SBI but much lower target-arm ratios.
+The current run contains **17,920 method runs** (2 learners × 112 horizons × 20 trials × 4 methods). At 1,000,000 records, UCB target-arm ratios are **99.68% for both SBI and PBI**; TS SBI/PBI both reach **99.99%**. Infeasible trials are included. The heuristic has the same endpoint cost as SBI but much lower target-arm ratios.
 
 Recorded outputs include:
 

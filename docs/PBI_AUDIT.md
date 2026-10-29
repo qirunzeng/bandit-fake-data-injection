@@ -60,3 +60,5 @@ clang++ -std=c++17 -O3 -pthread experiments/search_reward.cpp -o build/search_re
 Failure witnesses and first-trigger calculations are recorded in `results/reward-search/`; the complete calibrated run is in `results/horizon/`.
 
 The plotted grid additionally includes T = K = 10. This endpoint contains initialization only: every method has zero injection cost and target-arm ratio 1/K. It imposes no additional condition on the calibrated reward.
+
+The subsequent dense plotting grid has 112 horizons and retains the same calibrated reward. Lines use all measurements; marker symbols use a subset of about 11. Integer thresholds (especially ceil(log(T)) for TS) can produce plateaus and jumps, so the exporter does not apply spline smoothing.

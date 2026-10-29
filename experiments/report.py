@@ -210,8 +210,11 @@ def export(source, output):
             rows = [r for r in runs if r["learner"] == learner and r["grid"] == "horizon"]
             values = series(rows, "ratio" if kind == "ratio" else "cost", "T")
             table(target / (name + ".dat"), values, fields)
-            # Every plotted marker is an independently simulated horizon endpoint.
-            markers = values
+            # The line uses every measured point; symbols are only a readability aid.
+            positions = [values[0]["x"]] + [values[-1]["x"] * j / 10 for j in range(1, 11)]
+            indices = sorted({min(range(len(values)), key=lambda i: abs(values[i]["x"] - x))
+                              for x in positions})
+            markers = [values[i] for i in indices]
             table(target / (name + "-marks.dat"), markers, fields)
             bands = [{"x": r["x"], **{m: r[m + "_low"] for m in METHODS}} for r in values]
             bands += [{"x": r["x"], **{m: r[m + "_high"] for m in METHODS}} for r in reversed(values)]
@@ -220,7 +223,8 @@ def export(source, output):
             trials = len({r["trial"] for r in rows})
             provenance["plots"][name] = {"rows": len(values), "trials": trials,
                 "interpolation": "Straight segments between recorded points; no extrapolation.",
-                "markers": "Every independently simulated horizon endpoint.",
+                "markers": "Approximately 11 measured points marked; the line uses all measured horizons.",
+                "marked_rows": len(markers),
                 "source": "runs.csv: same learner, horizon, trial, and method for both panels",
                 "error_band": "mean plus/minus one sample standard deviation (ddof=1)",
                 "horizon_axis": "linear"}

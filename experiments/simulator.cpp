@@ -399,10 +399,12 @@ int main(int argc, char** argv) {
             if (benchmark) { add("benchmark",1000000,1000000,base); continue; }
             if (ratio_only) { add("ratio",100000,100000,base); continue; }
             if (!sweeps) {
-                const std::vector<long long> shared_horizons = quick
-                    ? std::vector<long long>{K,100,1000,10000}
-                    : std::vector<long long>{K,10000,100000,200000,300000,400000,500000,
-                                            600000,700000,800000,900000,1000000};
+                std::vector<long long> shared_horizons = {K,100,1000,10000};
+                if (!quick) {
+                    shared_horizons = {K,100,500};
+                    for (long long h = 1000; h < 10000; h += 1000) shared_horizons.push_back(h);
+                    for (long long h = 10000; h <= 1000000; h += 10000) shared_horizons.push_back(h);
+                }
                 for (long long h : shared_horizons) add("horizon",double(h),h,base);
                 continue;
             }
