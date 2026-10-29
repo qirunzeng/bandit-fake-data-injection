@@ -47,6 +47,12 @@ def load_results(source, require_full=True):
             expected = sum(n * abs(lower - mean) for n, mean in zip(injected, means))
             if not math.isclose(cost, expected, rel_tol=1e-10, abs_tol=1e-8):
                 raise ValueError("Cost is not the true-mean deviation cost")
+        if "completed_arms" in r:
+            if not 0 <= int(r["completed_arms"]) <= 9 or not 0 <= int(r["post_injection_pulls"]) <= sum(genuine[:-1]):
+                raise ValueError("Invalid suppression diagnostics")
+            if int(r["completed_arms"]) == 9 and r["method"] in ("sbi", "pbi", "li"):
+                if any(int(r[f"prescribed{i}"]) != injected[i] for i in range(9)):
+                    raise ValueError("Completed injection budgets must match actual counts")
         key = tuple(r[k] for k in ("learner", "grid", "x", "trial", "method"))
         if key in paired:
             raise ValueError("Duplicated run")
@@ -124,7 +130,10 @@ def summaries(runs, target):
                           "trials": len(rows), "mean_cost": average(rows, "cost"),
                           "mean_fakes": average(rows, "fakes"), "mean_ratio": average(rows, "ratio"),
                           "infeasible_trials": sum(int(r["infeasible_arms"]) > 0 for r in rows),
-                          "ratio_at_least_95pct_trials": sum(float(r["ratio"]) >= 0.95 for r in rows)})
+                          "ratio_at_least_95pct_trials": sum(float(r["ratio"]) >= 0.95 for r in rows),
+                          "fully_suppressed_trials": sum(int(r.get("completed_arms", -1)) == 9 and
+                              int(r.get("post_injection_pulls", -1)) == 0 and
+                              int(r.get("post_first_injection_pulls", -1)) == 0 and int(r["infeasible_arms"]) == 0 for r in rows)})
     with (target / "summary.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(summaries[0]), lineterminator="\n")
         writer.writeheader(); writer.writerows(summaries)

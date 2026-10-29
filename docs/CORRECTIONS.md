@@ -15,7 +15,7 @@ The corrected pipeline starts from upstream commit `dc2d3df799ec11d5d6111a5d8986
 | Cost | Absolute fake-reward deviation from the true arm mean, for each actually processed fake record. |
 | Heuristic | Exactly matched realized per-arm SBI counts, with randomized timing and no substituted saved arrays. |
 | PBI gaps | Check their signs before squaring. Reject infeasible waiting intervals rather than clamping them to zero. |
-| PBI execution | Serialize batches, use the actual final batch size, and recertify a delayed batch. Keep all infeasible trials. |
+| PBI execution | Collect all arms due at one epoch, check overdue batches against the pre-injection state, then inject all accepted per-arm batches before the next genuine pull. Use actual final batch sizes and retain infeasible trials. |
 | Randomness | Explicit SplitMix64/Box-Muller streams, paired arm-wise observations, recorded seeds, and deterministic task collection. |
 | Reporting | 20 repetitions per horizon for each learner. Both panels use the same endpoint runs at 11 varying horizons up to 1,000,000, with linear axes and sample standard deviations. |
 
@@ -23,11 +23,11 @@ The corrected pipeline starts from upstream commit `dc2d3df799ec11d5d6111a5d8986
 
 The implementation computes a sufficient scheduling certificate. Rejecting a plan means this certificate could not justify the proposed schedule; it does not prove that every possible periodic attack must fail. Rechecking delayed batches is an implementation safeguard under the global record stream. This behavior is documented as certificate-checked PBI, rather than claiming the original theorem holds without additional conditions.
 
-At fake reward -64 and batch size 10, TS per-arm budgets fit in one batch; coincident SBI/PBI curves do not establish a periodic-injection advantage. UCB at T = 1,000,000 has infeasible PBI plans in 2 of 20 trials, lowering the mean target-arm ratio to 89.72% versus SBI's 99.68%. The archived batch-size and reward-strength sweeps include additional infeasible settings.
+The former -64 setting had two UCB schedule rejections at T = 1,000,000. The simultaneous-batch fix does not change these runs: neither involves simultaneous due arms. The first rejection has a negative waiting-time bound before any injection. The current -70 setting is integer-calibrated on the finite publication grid for complete suppression; see [the audit and deterministic counterexample](PBI_AUDIT.md). These experiments do not repair the missing first-batch feasibility condition in the theorem.
 
 ## Scope of the reward range
 
-The main fixed range, -64 to 1, permits much stronger negative feedback than a system that enforces binary clicks. It is used as a controlled suppression setting. The separate unit-range injection check keeps fake rewards between zero and one; the tested SBI and checked PBI strategies cannot certify their plans there. This observation is not an impossibility theorem for other attacks.
+The main fixed range, -70 to 1, permits much stronger negative feedback than a system that enforces binary clicks. It is used as a controlled suppression setting. The separate unit-range injection check keeps fake rewards between zero and one; the tested SBI and checked PBI strategies cannot certify their plans there. This observation is not an impossibility theorem for other attacks.
 
 ## Validation
 

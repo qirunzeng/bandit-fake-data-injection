@@ -32,31 +32,31 @@ The current publication run is in `results/horizon/`; the earlier broad sweeps r
 | Genuine rewards | Bernoulli at the movie interaction rate | Gaussian, standard deviation 0.05 |
 | Confidence parameter | 0.05 | 0.05 |
 | Default attack parameter | 0.2 | 1.0 |
-| Shared bounded fake reward | -64 | -64 |
+| Shared bounded fake reward | -70 | -70 |
 | PBI maximum batch size | 10 | 10 |
 | Maximum horizon | 1,000,000 records | 1,000,000 records |
 | Horizon settings | 11 | 11 |
 
 Both genuine and fake samples consume the same horizon. Every fake sample updates the same counts and empirical means used by the learner. Attack cost is always the sum of absolute deviations from the **true arm mean**; the number of injected samples is recorded separately.
 
-The fixed injection interval is -64 to 1 for every bounded method. This is a broad suppression stress setting, not a binary-feedback validity constraint. Unit-range injection experiments are retained in the archived broad sweeps. LI remains an unbounded reference.
+The fixed injection interval is -70 to 1 for every bounded method. This is a broad suppression stress setting, not a binary-feedback validity constraint. Unit-range injection experiments are retained in the archived broad sweeps. LI remains an unbounded reference.
 
 ## Methods and feasibility
 
 - **SBI:** compute the bounded injection budget at the pull-count threshold and process the batch without interleaved genuine actions.
-- **PBI:** check the signed gaps and positive integer waiting times before executing the periodic schedule. Infeasible arm-level plans are recorded and withheld; their trials remain in every average. Delayed batches are recertified before execution.
+- **PBI:** check the signed gaps and positive integer waiting times before executing the periodic schedule. Infeasible arm-level plans are recorded and withheld; their trials remain in every average. All arms due at the same epoch are checked against one pre-injection state and injected before any genuine pull. Only batches already overdue at that epoch are recertified.
 - **LI:** inject one unrestricted sample per triggered non-target arm.
 - **Matched-budget heuristic:** supply the actual per-arm SBI budget to a random-timing control. Counts and true-mean costs match SBI exactly; target-arm selections need not match. This control uses the paired SBI run's budget rather than estimating a budget online.
 
-At T = 1,000,000, UCB PBI has infeasible plans in 2 of 20 trials; these trials remain in the averages. TS PBI still fits in one batch per arm and coincides with SBI. The archived batch and reward sensitivity experiments provide additional feasibility checks; coincident curves do not establish a benefit from periodic interventions. The checks do not resolve the outstanding mathematical conditions of the general PBI theorem.
+The shared reward -70 is the least negative **integer** passing the declared finite calibration grid: all 880 SBI/PBI runs complete the nine non-target arms with no infeasible schedules and no subsequent pulls, including between batches. Every integer from -1 through -69 has a recorded failure witness. This calibrates on the displayed seeds; it is not a universal or out-of-sample success guarantee. See [the scheduling audit](docs/PBI_AUDIT.md) and `results/reward-search/`.
 
 ## Results and additional checks
 
-The current run contains **1,760 method runs** (2 learners × 11 horizons × 20 trials × 4 methods). At 1,000,000 records, UCB target-arm ratios are **99.68% for SBI** and **89.72% for PBI**; TS SBI/PBI both reach **99.99%**. Infeasible trials are included. The heuristic has the same endpoint cost as SBI but much lower target-arm ratios.
+The current run contains **1,760 method runs** (2 learners × 11 horizons × 20 trials × 4 methods). At 1,000,000 records, UCB target-arm ratios are **99.68% for both SBI and PBI**; TS SBI/PBI both reach **99.99%**. Infeasible trials are included. The heuristic has the same endpoint cost as SBI but much lower target-arm ratios.
 
 Recorded outputs include:
 
-- `runs.csv`: seeds, parameters, costs, target ratios, feasibility flags, and per-arm genuine/fake/prescribed counts.
+- `runs.csv`: seeds, parameters, costs, target ratios, feasibility flags, per-arm counts, suppression diagnostics, and simultaneous-batch counters.
 - `trajectories.csv`: empty apart from its header for the endpoint-only experiment; no separate trajectory runs are needed.
 - `manifest.json`: input, code, and result hashes.
 - Exported `summary.csv`: sample counts, costs, feasibility, and target-arm ratios at every horizon.

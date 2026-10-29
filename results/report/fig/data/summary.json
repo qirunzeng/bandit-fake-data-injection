@@ -5,11 +5,12 @@
     "x": 10000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 799.345,
-    "mean_fakes": 12.35,
-    "mean_ratio": 0.00519,
+    "mean_cost": 742.5475,
+    "mean_fakes": 10.5,
+    "mean_ratio": 0.00505,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -21,7 +22,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.9901,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -29,11 +31,12 @@
     "x": 10000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 799.345,
-    "mean_fakes": 12.35,
-    "mean_ratio": 0.989765,
+    "mean_cost": 742.5475,
+    "mean_fakes": 10.5,
+    "mean_ratio": 0.98995,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -41,11 +44,12 @@
     "x": 10000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 799.345,
-    "mean_fakes": 12.35,
-    "mean_ratio": 0.989765,
+    "mean_cost": 742.5475,
+    "mean_fakes": 10.5,
+    "mean_ratio": 0.98995,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -53,11 +57,12 @@
     "x": 100000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1058.095,
-    "mean_fakes": 16.35,
-    "mean_ratio": 0.0006965,
+    "mean_cost": 1014.9375,
+    "mean_fakes": 14.35,
+    "mean_ratio": 0.0006975,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -69,7 +74,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99883,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -77,11 +83,12 @@
     "x": 100000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1058.095,
-    "mean_fakes": 16.35,
-    "mean_ratio": 0.9987565,
+    "mean_cost": 1014.9375,
+    "mean_fakes": 14.35,
+    "mean_ratio": 0.9987765,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -89,11 +96,12 @@
     "x": 100000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1058.095,
-    "mean_fakes": 16.35,
-    "mean_ratio": 0.9987565,
+    "mean_cost": 1014.9375,
+    "mean_fakes": 14.35,
+    "mean_ratio": 0.9987765,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -101,11 +109,12 @@
     "x": 200000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
+    "mean_cost": 1180.8974999999998,
+    "mean_fakes": 16.7,
     "mean_ratio": 0.0003785,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -117,7 +126,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99937,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -125,11 +135,12 @@
     "x": 200000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
-    "mean_ratio": 0.99932575,
+    "mean_cost": 1180.8974999999998,
+    "mean_fakes": 16.7,
+    "mean_ratio": 0.9993315,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -137,11 +148,12 @@
     "x": 200000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
-    "mean_ratio": 0.99932575,
+    "mean_cost": 1180.8974999999998,
+    "mean_fakes": 16.7,
+    "mean_ratio": 0.9993315,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -149,11 +161,12 @@
     "x": 300000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
-    "mean_ratio": 0.0002638333333333333,
+    "mean_cost": 1180.8974999999998,
+    "mean_fakes": 16.7,
+    "mean_ratio": 0.00026366666666666666,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -165,7 +178,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99958,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -173,11 +187,12 @@
     "x": 300000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
-    "mean_ratio": 0.9995505,
+    "mean_cost": 1180.8974999999998,
+    "mean_fakes": 16.7,
+    "mean_ratio": 0.9995543333333333,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -185,11 +200,12 @@
     "x": 300000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
-    "mean_ratio": 0.9995505,
+    "mean_cost": 1180.8974999999998,
+    "mean_fakes": 16.7,
+    "mean_ratio": 0.9995543333333333,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -197,11 +213,12 @@
     "x": 400000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
+    "mean_cost": 1180.8975,
+    "mean_fakes": 16.7,
     "mean_ratio": 0.000206375,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -213,7 +230,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.999685,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -221,11 +239,12 @@
     "x": 400000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
-    "mean_ratio": 0.9996628750000001,
+    "mean_cost": 1180.8974999999998,
+    "mean_fakes": 16.7,
+    "mean_ratio": 0.99966575,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -233,11 +252,12 @@
     "x": 400000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1154.9225,
-    "mean_fakes": 17.85,
-    "mean_ratio": 0.9996628750000001,
+    "mean_cost": 1180.8974999999998,
+    "mean_fakes": 16.7,
+    "mean_ratio": 0.99966575,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -245,11 +265,12 @@
     "x": 500000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
     "mean_ratio": 0.0001693,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -261,7 +282,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99973,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -269,11 +291,12 @@
     "x": 500000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.999712,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9997127,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -281,11 +304,12 @@
     "x": 500000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.999712,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9997127,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -293,11 +317,12 @@
     "x": 600000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.00014358333333333334,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.00014366666666666667,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -309,7 +334,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.999775,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -317,11 +343,12 @@
     "x": 600000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.99976,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9997605833333333,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -329,11 +356,12 @@
     "x": 600000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.99976,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9997605833333333,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -341,11 +369,12 @@
     "x": 700000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.00012357142857142856,
+    "mean_cost": 1247.9174999999998,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.00012364285714285713,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -357,7 +386,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.9998071428571429,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -365,11 +395,12 @@
     "x": 700000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.9997942857142857,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9997947857142857,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -377,11 +408,12 @@
     "x": 700000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.9997942857142857,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9997947857142857,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -389,11 +421,12 @@
     "x": 800000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
     "mean_ratio": 0.0001100625,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -405,7 +438,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99983125,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -413,11 +447,12 @@
     "x": 800000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.99982,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9998204375,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -425,11 +460,12 @@
     "x": 800000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.99982,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9998204375,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -437,11 +473,12 @@
     "x": 900000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
     "mean_ratio": 9.9e-05,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -453,7 +490,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99985,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -461,11 +499,12 @@
     "x": 900000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.99984,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9998403888888888,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -473,11 +512,12 @@
     "x": 900000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.99984,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.9998403888888888,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -485,11 +525,12 @@
     "x": 1000000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
     "mean_ratio": 9.035e-05,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ts",
@@ -501,7 +542,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.999865,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -509,11 +551,12 @@
     "x": 1000000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.999856,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.99985635,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ts",
@@ -521,11 +564,12 @@
     "x": 1000000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 1164.6,
-    "mean_fakes": 18.0,
-    "mean_ratio": 0.999856,
+    "mean_cost": 1247.9175,
+    "mean_fakes": 17.65,
+    "mean_ratio": 0.99985635,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -533,11 +577,12 @@
     "x": 10000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 2776.0955,
-    "mean_fakes": 42.85,
-    "mean_ratio": 0.021225,
+    "mean_cost": 2774.8459,
+    "mean_fakes": 39.2,
+    "mean_ratio": 0.01849,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -549,7 +594,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.7912,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -557,11 +603,12 @@
     "x": 10000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 2776.0955000000004,
-    "mean_fakes": 42.85,
-    "mean_ratio": 0.787815,
+    "mean_cost": 2774.8459000000003,
+    "mean_fakes": 39.2,
+    "mean_ratio": 0.78818,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -569,11 +616,12 @@
     "x": 10000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 2776.0955000000004,
-    "mean_fakes": 42.85,
-    "mean_ratio": 0.787815,
+    "mean_cost": 2774.8459000000003,
+    "mean_fakes": 39.2,
+    "mean_ratio": 0.78818,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -581,11 +629,12 @@
     "x": 100000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3265.38295,
-    "mean_fakes": 50.4,
-    "mean_ratio": 0.0016495,
+    "mean_cost": 3273.9627,
+    "mean_fakes": 46.25,
+    "mean_ratio": 0.0016465,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -597,7 +646,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.97399,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -605,11 +655,12 @@
     "x": 100000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3265.38295,
-    "mean_fakes": 50.4,
-    "mean_ratio": 0.973576,
+    "mean_cost": 3273.9627,
+    "mean_fakes": 46.25,
+    "mean_ratio": 0.9736175,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -617,11 +668,12 @@
     "x": 100000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3265.38295,
-    "mean_fakes": 50.4,
-    "mean_ratio": 0.973576,
+    "mean_cost": 3273.9627,
+    "mean_fakes": 46.25,
+    "mean_ratio": 0.9736175,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -629,11 +681,12 @@
     "x": 200000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3424.1142,
-    "mean_fakes": 52.85,
-    "mean_ratio": 0.000882,
+    "mean_cost": 3447.43945,
+    "mean_fakes": 48.7,
+    "mean_ratio": 0.00088225,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -645,7 +698,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.986185,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -653,11 +707,12 @@
     "x": 200000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3420.8646,
-    "mean_fakes": 52.8,
-    "mean_ratio": 0.985966,
+    "mean_cost": 3447.43945,
+    "mean_fakes": 48.7,
+    "mean_ratio": 0.9859865,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -665,11 +720,12 @@
     "x": 200000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3424.1142,
-    "mean_fakes": 52.85,
-    "mean_ratio": 0.98596575,
+    "mean_cost": 3447.43945,
+    "mean_fakes": 48.7,
+    "mean_ratio": 0.9859865,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -677,11 +733,12 @@
     "x": 300000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3508.3388999999997,
-    "mean_fakes": 54.15,
-    "mean_ratio": 0.0006188333333333333,
+    "mean_cost": 3521.7677,
+    "mean_fakes": 49.75,
+    "mean_ratio": 0.0006173333333333333,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -693,7 +750,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99049,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -701,11 +759,12 @@
     "x": 300000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3508.3388999999997,
-    "mean_fakes": 54.15,
-    "mean_ratio": 0.9903395,
+    "mean_cost": 3521.7677,
+    "mean_fakes": 49.75,
+    "mean_ratio": 0.9903541666666666,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -713,11 +772,12 @@
     "x": 300000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3508.3388999999997,
-    "mean_fakes": 54.15,
-    "mean_ratio": 0.9903395,
+    "mean_cost": 3521.7677,
+    "mean_fakes": 49.75,
+    "mean_ratio": 0.9903541666666666,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -725,11 +785,12 @@
     "x": 400000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3563.41395,
-    "mean_fakes": 55.0,
+    "mean_cost": 3606.7141,
+    "mean_fakes": 50.95,
     "mean_ratio": 0.000474375,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -741,7 +802,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99271,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -749,11 +811,12 @@
     "x": 400000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3479.1946,
-    "mean_fakes": 53.7,
-    "mean_ratio": 0.94298125,
-    "infeasible_trials": 1,
-    "ratio_at_least_95pct_trials": 19
+    "mean_cost": 3606.7141,
+    "mean_fakes": 50.95,
+    "mean_ratio": 0.992605125,
+    "infeasible_trials": 0,
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -761,11 +824,12 @@
     "x": 400000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3563.41395,
-    "mean_fakes": 55.0,
-    "mean_ratio": 0.992595,
+    "mean_cost": 3606.7141,
+    "mean_fakes": 50.95,
+    "mean_ratio": 0.992605125,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -773,11 +837,12 @@
     "x": 500000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3621.6774,
-    "mean_fakes": 55.9,
-    "mean_ratio": 0.0003868,
+    "mean_cost": 3645.66895,
+    "mean_fakes": 51.5,
+    "mean_ratio": 0.0003869,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -789,7 +854,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99406,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -797,11 +863,12 @@
     "x": 500000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3407.83925,
-    "mean_fakes": 52.6,
-    "mean_ratio": 0.894598,
-    "infeasible_trials": 2,
-    "ratio_at_least_95pct_trials": 18
+    "mean_cost": 3645.66895,
+    "mean_fakes": 51.5,
+    "mean_ratio": 0.993975,
+    "infeasible_trials": 0,
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -809,11 +876,12 @@
     "x": 500000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3621.6774,
-    "mean_fakes": 55.9,
-    "mean_ratio": 0.9939662,
+    "mean_cost": 3645.66895,
+    "mean_fakes": 51.5,
+    "mean_ratio": 0.993975,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -821,11 +889,12 @@
     "x": 600000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3654.0938499999997,
-    "mean_fakes": 56.4,
-    "mean_ratio": 0.00032725,
+    "mean_cost": 3677.50205,
+    "mean_fakes": 51.95,
+    "mean_ratio": 0.0003275,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -837,7 +906,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99499,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -845,11 +915,12 @@
     "x": 600000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3440.2457,
-    "mean_fakes": 53.1,
-    "mean_ratio": 0.89544375,
-    "infeasible_trials": 2,
-    "ratio_at_least_95pct_trials": 18
+    "mean_cost": 3677.50205,
+    "mean_fakes": 51.95,
+    "mean_ratio": 0.9949184166666667,
+    "infeasible_trials": 0,
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -857,11 +928,12 @@
     "x": 600000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3654.0938499999997,
-    "mean_fakes": 56.4,
-    "mean_ratio": 0.994911,
+    "mean_cost": 3677.50205,
+    "mean_fakes": 51.95,
+    "mean_ratio": 0.9949184166666667,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -869,11 +941,12 @@
     "x": 700000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3683.27865,
-    "mean_fakes": 56.85,
+    "mean_cost": 3709.3796,
+    "mean_fakes": 52.4,
     "mean_ratio": 0.0002862142857142857,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -885,7 +958,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.9956542857142857,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -893,11 +967,12 @@
     "x": 700000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3469.42805,
-    "mean_fakes": 53.55,
-    "mean_ratio": 0.8960479285714286,
-    "infeasible_trials": 2,
-    "ratio_at_least_95pct_trials": 18
+    "mean_cost": 3709.3795999999998,
+    "mean_fakes": 52.4,
+    "mean_ratio": 0.9955922857142857,
+    "infeasible_trials": 0,
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -905,11 +980,12 @@
     "x": 700000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3683.2786499999997,
-    "mean_fakes": 56.85,
-    "mean_ratio": 0.9955859285714286,
+    "mean_cost": 3709.3795999999998,
+    "mean_fakes": 52.4,
+    "mean_ratio": 0.9955922857142857,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -917,11 +993,12 @@
     "x": 800000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3712.4212,
-    "mean_fakes": 57.3,
+    "mean_cost": 3719.9803500000003,
+    "mean_fakes": 52.55,
     "mean_ratio": 0.0002534375,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -933,7 +1010,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99616375,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -941,11 +1019,12 @@
     "x": 800000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3495.3377499999997,
-    "mean_fakes": 53.95,
-    "mean_ratio": 0.8965110625,
-    "infeasible_trials": 2,
-    "ratio_at_least_95pct_trials": 18
+    "mean_cost": 3719.98035,
+    "mean_fakes": 52.55,
+    "mean_ratio": 0.9961093125,
+    "infeasible_trials": 0,
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -953,11 +1032,12 @@
     "x": 800000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3712.4211999999998,
-    "mean_fakes": 57.3,
-    "mean_ratio": 0.996103375,
+    "mean_cost": 3719.98035,
+    "mean_fakes": 52.55,
+    "mean_ratio": 0.9961093125,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -965,11 +1045,12 @@
     "x": 900000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3751.2951000000003,
-    "mean_fakes": 57.9,
-    "mean_ratio": 0.00022822222222222222,
+    "mean_cost": 3762.4776,
+    "mean_fakes": 53.15,
+    "mean_ratio": 0.00022816666666666667,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -981,7 +1062,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.99656,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -989,11 +1071,12 @@
     "x": 900000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3521.2657999999997,
-    "mean_fakes": 54.35,
-    "mean_ratio": 0.8968713888888888,
-    "infeasible_trials": 2,
-    "ratio_at_least_95pct_trials": 18
+    "mean_cost": 3762.4775999999997,
+    "mean_fakes": 53.15,
+    "mean_ratio": 0.9965109444444444,
+    "infeasible_trials": 0,
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -1001,11 +1084,12 @@
     "x": 900000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3751.2951,
-    "mean_fakes": 57.9,
-    "mean_ratio": 0.9965056666666666,
+    "mean_cost": 3762.4775999999997,
+    "mean_fakes": 53.15,
+    "mean_ratio": 0.9965109444444444,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -1013,11 +1097,12 @@
     "x": 1000000.0,
     "method": "heuristic",
     "trials": 20,
-    "mean_cost": 3786.9594,
-    "mean_fakes": 58.45,
-    "mean_ratio": 0.0002072,
+    "mean_cost": 3783.7268,
+    "mean_fakes": 53.45,
+    "mean_ratio": 0.0002074,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 0
+    "ratio_at_least_95pct_trials": 0,
+    "fully_suppressed_trials": 0
   },
   {
     "learner": "ucb",
@@ -1029,7 +1114,8 @@
     "mean_fakes": 9.0,
     "mean_ratio": 0.996877,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -1037,11 +1123,12 @@
     "x": 1000000.0,
     "method": "pbi",
     "trials": 20,
-    "mean_cost": 3547.2097999999996,
-    "mean_fakes": 54.75,
-    "mean_ratio": 0.8971596000000001,
-    "infeasible_trials": 2,
-    "ratio_at_least_95pct_trials": 18
+    "mean_cost": 3783.7268,
+    "mean_fakes": 53.45,
+    "mean_ratio": 0.9968325499999999,
+    "infeasible_trials": 0,
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   },
   {
     "learner": "ucb",
@@ -1049,10 +1136,11 @@
     "x": 1000000.0,
     "method": "sbi",
     "trials": 20,
-    "mean_cost": 3786.9593999999997,
-    "mean_fakes": 58.45,
-    "mean_ratio": 0.99682755,
+    "mean_cost": 3783.7268,
+    "mean_fakes": 53.45,
+    "mean_ratio": 0.9968325499999999,
     "infeasible_trials": 0,
-    "ratio_at_least_95pct_trials": 20
+    "ratio_at_least_95pct_trials": 20,
+    "fully_suppressed_trials": 20
   }
 ]

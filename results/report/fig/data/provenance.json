@@ -1,17 +1,19 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "repository": "qirunzeng/bandit-fake-data-injection",
   "upstream_repository": "richardhoff88/online_learning_torank",
   "upstream_commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
   "mode": "full",
   "source_sha256": {
-    "experiments/simulator.cpp": "409a91d7b9654648ce500f59f4692f28c0daf364e4f8a09f23a61343c3de7a8e",
+    "experiments/simulator.cpp": "010465cb512cbcab83f6565e11a0152b885b4f8dad322824f4e73d016665608b",
     "experiments/prepare_data.py": "1f63ed9e04b79f292452b0fcb9ff62202ad95ca60f94d9a62ea3f180640739a2",
-    "experiments/run.py": "5b346a48e4a76ec76c969e70b6c66e656685bf4a5943c49e544c6e37a1e704db",
-    "experiments/report.py": "9af97d15a1ebaa44175be180f74e39fcb84364439a88555a807c737bcc5757d2"
+    "experiments/run.py": "d527a6bf47cffa39cd741b44ffb5aae2c98961a1d63681fe4aafb0ea02c5e740",
+    "experiments/report.py": "a8075085f53fe77fcad4b7e46ea7df23f3eda2555c70b5e824feaff65b5e8a89",
+    "experiments/search_reward.cpp": "22a928269a58a374a0ea4df7eb1bc442e85996a500d05f33e709a15090af9fb8",
+    "experiments/audit_pbi.cpp": "cd4c9bdd7990035847708ab81447f7e884220b0e24c40cc1ea9bf3e1f50c6924"
   },
   "result_sha256": {
-    "runs.csv": "e52022313d7708ba96cf3b345d8a9aae7efd1ea4ddfefad083b23f1a106262ed",
+    "runs.csv": "bd3aa545e91a2c1e6635c7cdcf659e1b534735d6b283a4c22fbb98754bc73c5f",
     "trajectories.csv": "160db7cb257948ffdacd95e5675501c92215c1b147d26ff3f5ae803c08a177ec"
   },
   "data": {
@@ -50,7 +52,7 @@
         0.05
       ],
       "fake_lower_bounds": [
-        -64.0
+        -70.0
       ],
       "batch_sizes": [
         10
@@ -78,7 +80,7 @@
         0.05
       ],
       "fake_lower_bounds": [
-        -64.0
+        -70.0
       ],
       "batch_sizes": [
         10
@@ -86,6 +88,7 @@
     }
   },
   "protocol": {
+    "suppression_diagnostics": "For SI/PBI, completed_arms counts fully injected (or zero-budget suppressed) non-target arms; post_injection_pulls counts genuine selections after completion; post_first_injection_pulls also covers selections between batches.",
     "curves": "Cost and target ratio use the same endpoint runs at each varying horizon T.",
     "clock": "Each genuine or injected sample consumes one of T records, including initialization.",
     "cost": "Sum of abs(fake_reward - true_arm_mean), for every processed fake record.",
@@ -94,7 +97,7 @@
     "ts_rewards": "Gaussian(mean, 0.05^2) throughout, including initialization.",
     "ts_posterior": "Independent Gaussian(empirical_mean, 1/sample_count).",
     "randomness": "SplitMix64 and Box-Muller; arm-wise reward streams and posterior streams are paired across methods.",
-    "pbi": "Reject nonpositive signed gaps or cooldowns below one; record infeasible arms without excluding trials. Recertify delayed batches before execution.",
+    "pbi": "Reject nonpositive signed gaps or cooldowns below one. Collect all due arms and recertify genuinely overdue batches against the same pre-injection state, then execute all accepted batches before any genuine pull. Peer batches are not false delays. Infeasible trials remain in all averages.",
     "heuristic": "Randomly place SBI's realized per-arm fake budget after initialization; exactly match counts and true-mean cost.",
     "li": "Unbounded reference; not subject to the bounded methods' reward interval."
   },

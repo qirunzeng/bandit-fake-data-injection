@@ -51,7 +51,7 @@ struct Random {
 struct Config {
     std::string learner, grid;
     long long horizon = 100000;
-    double delta0 = 0.2, delta = 0.05, lower = -64, upper = 1;
+    double delta0 = 0.2, delta = 0.05, lower = -70, upper = 1;
     int batch = 10, trial = 0;
     uint64_t seed = 0;
     double x = 0;
@@ -62,7 +62,9 @@ struct Config {
 struct Result {
     long long time = 0, target = 0, injected = 0;
     double cost = 0;
-    int infeasible = 0, planned = 0, recertifications = 0;
+    int infeasible = 0, planned = 0, recertifications = 0, completed_arms = 0;
+    long long post_injection_pulls = 0, post_first_injection_pulls = 0;
+    int pbi_batch_epochs = 0, pbi_multiarm_epochs = 0, pbi_max_due_arms = 0;
     Counts fake{}, genuine{}, prescribed{};
     std::vector<std::pair<long long, double>> trace;
 };
@@ -71,6 +73,7 @@ struct State {
     Config c;
     Values truth, sums{}, inverse_roots{};
     Counts counts{};
+    std::array<bool, K> completed{};
     Result r;
     std::vector<Random> rewards;
     Random posterior, schedule;
@@ -84,6 +87,9 @@ struct State {
         require(n > 0, "confidence bound before initialization");
         return c.sigma() * std::sqrt(2.0 / n * std::log(PI * PI * K * double(n) * n / (3 * c.delta)));
     }
+    void complete(int arm) {
+        if (!completed[arm]) { completed[arm] = true; ++r.completed_arms; }
+    }
     void record(int arm, double reward, bool fake, bool bounded = true) {
         require(r.time < c.horizon, "horizon overrun");
         require(arm >= 0 && arm < K && std::isfinite(reward), "invalid record");
@@ -92,7 +98,12 @@ struct State {
             require(!bounded || (reward >= c.lower && reward <= c.upper), "out-of-range fake reward");
             ++r.injected; ++r.fake[arm];
             r.cost += std::abs(reward - truth[arm]);
-        } else { ++r.genuine[arm]; if (arm == K - 1) ++r.target; }
+            if (r.prescribed[arm] > 0 && r.fake[arm] == r.prescribed[arm]) complete(arm);
+        } else {
+            ++r.genuine[arm]; if (arm == K - 1) ++r.target;
+            if (completed[arm]) ++r.post_injection_pulls;
+            if (r.fake[arm] > 0) ++r.post_first_injection_pulls;
+        }
         ++counts[arm]; sums[arm] += reward;
         inverse_roots[arm] = 1.0 / std::sqrt(double(counts[arm]));
         ++r.time;
@@ -175,8 +186,40 @@ struct State {
     }
 };
 
+// Decide which per-arm batches are due using one pre-injection state.
+// Peer injections in the same epoch are not scheduling delays.
+bool inject_due_batches(State& s, Counts& remaining, Counts& due, Counts& waits,
+                        bool stop_on_failure = false) {
+    const long long epoch = s.r.time;
+    std::vector<int> ready;
+    for (int i = 0; i < K - 1; ++i)
+        if (remaining[i] > 0 && due[i] <= epoch) ready.push_back(i);
+    if (ready.empty()) return false;
+    std::stable_sort(ready.begin(), ready.end(), [&](int a, int b) { return due[a] < due[b]; });
+    ++s.r.pbi_batch_epochs;
+    if (ready.size() > 1) ++s.r.pbi_multiarm_epochs;
+    s.r.pbi_max_due_arms = std::max(s.r.pbi_max_due_arms, int(ready.size()));
+    // Validate every genuinely overdue batch before any member of this group is injected.
+    for (int i : ready) if (due[i] < epoch) {
+        ++s.r.recertifications;
+        if (!s.cooldown(i, remaining[i], waits[i])) {
+            ++s.r.infeasible; remaining[i] = 0;
+            if (stop_on_failure) return true;
+        }
+    }
+    for (int i : ready) {
+        if (remaining[i] == 0) continue;
+        long long take = std::min<long long>(remaining[i], s.c.batch);
+        for (long long j = 0; j < take && s.r.time < s.c.horizon; ++j) {
+            s.record(i, s.c.lower, true); --remaining[i];
+        }
+        due[i] = s.r.time + waits[i];
+    }
+    return true;
+}
+
 Result simulate(const Config& c, const Values& means, const std::string& method,
-                const Counts& matched_budget = Counts{}) {
+                const Counts& matched_budget = Counts{}, bool stop_on_failure = false) {
     State s(c, means); s.initialize();
     if (s.r.time == c.horizon) return s.finish();
     long long threshold = std::max(1LL, static_cast<long long>(std::ceil(std::log(double(c.horizon)) / (c.delta0 * c.delta0))));
@@ -193,12 +236,13 @@ Result simulate(const Config& c, const Values& means, const std::string& method,
                     s.record(i, (s.counts[i] + 1) * ell - s.sums[i], true, false);
                 } else {
                     long long n = s.budget(i, ell);
-                    if (n < 0) { ++s.r.infeasible; continue; }
+                    if (n < 0) { ++s.r.infeasible; if (stop_on_failure) return s.r; continue; }
                     s.r.prescribed[i] = n;
+                    if (n == 0) s.complete(i);
                     if (method == "sbi") {
                         while (n-- > 0 && s.r.time < c.horizon) s.record(i, c.lower, true);
                     } else if (n > 0) {
-                        if (!s.cooldown(i, n, waits[i])) { ++s.r.infeasible; continue; }
+                        if (!s.cooldown(i, n, waits[i])) { ++s.r.infeasible; if (stop_on_failure) return s.r; continue; }
                         remaining[i] = n; due[i] = s.r.time;
                     }
                 }
@@ -207,23 +251,8 @@ Result simulate(const Config& c, const Values& means, const std::string& method,
         }
         if (s.r.time == c.horizon) break;
         if (method == "pbi") {
-            int selected = -1;
-            for (int i = 0; i < K - 1; ++i)
-                if (remaining[i] > 0 && due[i] <= s.r.time &&
-                    (selected < 0 || due[i] < due[selected])) selected = i;
-            if (selected >= 0) {
-                int i = selected;
-                if (s.r.time > due[i]) {
-                    ++s.r.recertifications;
-                    if (!s.cooldown(i, remaining[i], waits[i])) {
-                        ++s.r.infeasible; remaining[i] = 0; continue;
-                    }
-                }
-                long long take = std::min<long long>(remaining[i], c.batch);
-                for (long long j = 0; j < take && s.r.time < c.horizon; ++j) {
-                    s.record(i, c.lower, true); --remaining[i];
-                }
-                due[i] = s.r.time + waits[i];
+            if (inject_due_batches(s, remaining, due, waits, stop_on_failure)) {
+                if (stop_on_failure && s.r.infeasible) return s.r;
                 continue;
             }
         } else if (method == "heuristic") {
@@ -238,6 +267,7 @@ Result simulate(const Config& c, const Values& means, const std::string& method,
             }
         }
         s.genuine(s.choose());
+        if (stop_on_failure && (s.r.post_injection_pulls || s.r.post_first_injection_pulls)) return s.r;
     }
     Result out = s.finish();
     if (method == "heuristic") {
@@ -273,6 +303,13 @@ void self_test() {
     State ledger(c, means); ledger.record(0, 1, false); ledger.record(0, -2, true);
     require(ledger.r.time == 2 && ledger.counts[0] == 2 && ledger.r.injected == 1 &&
             std::abs(ledger.r.cost - 2.9) < 1e-12, "true-mean cost and clock");
+    require(sbi.completed_arms == K - 1 && sbi.post_injection_pulls == 0,
+            "deterministic SBI suppression diagnostics");
+    ledger.complete(0); ledger.record(0, 1, false);
+    require(ledger.r.post_injection_pulls == 1 && ledger.r.post_first_injection_pulls == 1, "detect pulls after completed injection");
+    Config weak = c; weak.lower = 1;
+    Result screened = simulate(weak, means, "pbi", Counts{}, true);
+    require(screened.infeasible > 0 && screened.time < weak.horizon, "early rejection of infeasible search candidate");
     bool rejected = false;
     try { ledger.record(0, c.lower - 1, true); } catch (const std::exception&) { rejected = true; }
     require(rejected, "bounded validation");
@@ -288,15 +325,37 @@ void self_test() {
         Result matched = simulate(edge, means, "sbi");
         for (std::string method : {"li", "pbi", "heuristic"}) simulate(edge, means, method, matched.fake);
     }
+    // Two arms due together must both receive their batch before another genuine pull.
+    Config simultaneous = c; simultaneous.horizon = 100;
+    State grouped(simultaneous, means); grouped.initialize();
+    Counts pending{}, next_due{}, delays{};
+    pending[0] = pending[1] = pending[2] = 1;
+    grouped.r.prescribed[0] = grouped.r.prescribed[1] = grouped.r.prescribed[2] = 1;
+    next_due[0] = next_due[1] = grouped.r.time; next_due[2] = grouped.r.time + 1;
+    delays.fill(5);
+    Counts genuine_before = grouped.r.genuine;
+    require(inject_due_batches(grouped, pending, next_due, delays), "due group executes");
+    require(grouped.r.fake[0] == 1 && grouped.r.fake[1] == 1 && grouped.r.fake[2] == 0 &&
+            grouped.r.genuine == genuine_before && grouped.r.recertifications == 0 &&
+            grouped.r.pbi_multiarm_epochs == 1, "same-epoch arms all execute without false delays");
+    require(next_due[0] == K + 1 + 5 && next_due[1] == K + 2 + 5,
+            "each cooldown starts after its own actual batch completion");
+    Config truncated = c; truncated.horizon = K + 1;
+    State final_group(truncated, means); final_group.initialize();
+    pending.fill(0); pending[0] = pending[1] = 1;
+    next_due.fill(K); delays.fill(5);
+    inject_due_batches(final_group, pending, next_due, delays);
+    require(final_group.r.time == K + 1 && final_group.r.injected == 1 && pending[1] == 1,
+            "simultaneous batches respect the shared horizon");
     std::cout << "PASS: true-mean costs, shared clock, bounded rewards, SI suppression, matched budgets, "
-                 "PBI sign checks, initialization, and horizon truncation\n";
+                 "PBI sign checks, simultaneous due arms, suppression diagnostics, initialization, and horizon truncation\n";
 }
 
 int main(int argc, char** argv) {
     try {
         std::string means_path = "experiments/data/movielens-means.csv", output = "results/horizon";
         int threads = 6, default_batch = 10; bool quick = false, benchmark = false, ratio_only = false, sweeps = false;
-        double fake_lower = -64;
+        double fake_lower = -70;
         uint64_t seed_base = 3141592653ULL;
         for (int a = 1; a < argc; ++a) {
             std::string arg = argv[a];
@@ -388,7 +447,7 @@ int main(int argc, char** argv) {
         std::filesystem::create_directories(output);
         std::ofstream raw(output + "/runs.csv"), trace(output + "/trajectories.csv");
         raw << std::setprecision(17); trace << std::setprecision(17);
-        raw << "learner,grid,x,trial,seed,T,delta0,delta,sigma,r_min,r_max,batch,method,cost,fakes,target,ratio,infeasible_arms,planned_arms,recertifications";
+        raw << "learner,grid,x,trial,seed,T,delta0,delta,sigma,r_min,r_max,batch,method,cost,fakes,target,ratio,infeasible_arms,planned_arms,recertifications,completed_arms,post_injection_pulls,post_first_injection_pulls,pbi_batch_epochs,pbi_multiarm_epochs,pbi_max_due_arms";
         for (int i = 0; i < K; ++i) raw << ",mu" << i << ",fake" << i << ",genuine" << i << ",prescribed" << i;
         raw << '\n'; trace << "learner,trial,method,t,ratio\n";
         std::array<std::string, 4> names = {"sbi","pbi","li","heuristic"};
@@ -400,7 +459,7 @@ int main(int argc, char** argv) {
                     << c.horizon << ',' << c.delta0 << ',' << c.delta << ',' << c.sigma() << ',' << c.lower
                     << ',' << c.upper << ',' << c.batch << ',' << names[m] << ',' << r.cost << ','
                     << r.injected << ',' << r.target << ',' << double(r.target) / c.horizon << ','
-                    << r.infeasible << ',' << r.planned << ',' << r.recertifications;
+                    << r.infeasible << ',' << r.planned << ',' << r.recertifications << ',' << r.completed_arms << ',' << r.post_injection_pulls << ',' << r.post_first_injection_pulls << ',' << r.pbi_batch_epochs << ',' << r.pbi_multiarm_epochs << ',' << r.pbi_max_due_arms;
                 for (int i = 0; i < K; ++i) raw << ',' << means[i] << ',' << r.fake[i] << ',' << r.genuine[i] << ',' << r.prescribed[i];
                 raw << '\n';
                 for (const auto& point : r.trace) trace << c.learner << ',' << c.trial << ',' << names[m] << ',' << point.first << ',' << point.second << '\n';

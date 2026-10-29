@@ -20,9 +20,9 @@ def sha256(path):
 def manifest(output, mode):
     with (output / "runs.csv").open() as stream:
         rows = list(csv.DictReader(stream))
-    sources = ["experiments/simulator.cpp", "experiments/prepare_data.py", "experiments/run.py", "experiments/report.py"]
+    sources = ["experiments/simulator.cpp", "experiments/prepare_data.py", "experiments/run.py", "experiments/report.py", "experiments/search_reward.cpp", "experiments/audit_pbi.cpp"]
     record = {
-        "schema_version": 2,
+        "schema_version": 3,
         "repository": "qirunzeng/bandit-fake-data-injection",
         "upstream_repository": "richardhoff88/online_learning_torank",
         "upstream_commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
@@ -42,6 +42,7 @@ def manifest(output, mode):
             } for learner in ("ucb", "ts")
         },
         "protocol": {
+            "suppression_diagnostics": "For SI/PBI, completed_arms counts fully injected (or zero-budget suppressed) non-target arms; post_injection_pulls counts genuine selections after completion; post_first_injection_pulls also covers selections between batches.",
             "curves": "Cost and target ratio use the same endpoint runs at each varying horizon T." if {r["grid"] for r in rows} == {"horizon"} else "Legacy sweeps or parameter probe.",
             "clock": "Each genuine or injected sample consumes one of T records, including initialization.",
             "cost": "Sum of abs(fake_reward - true_arm_mean), for every processed fake record.",
@@ -50,7 +51,7 @@ def manifest(output, mode):
             "ts_rewards": "Gaussian(mean, 0.05^2) throughout, including initialization.",
             "ts_posterior": "Independent Gaussian(empirical_mean, 1/sample_count).",
             "randomness": "SplitMix64 and Box-Muller; arm-wise reward streams and posterior streams are paired across methods.",
-            "pbi": "Reject nonpositive signed gaps or cooldowns below one; record infeasible arms without excluding trials. Recertify delayed batches before execution.",
+            "pbi": "Reject nonpositive signed gaps or cooldowns below one. Collect all due arms and recertify genuinely overdue batches against the same pre-injection state, then execute all accepted batches before any genuine pull. Peer batches are not false delays. Infeasible trials remain in all averages.",
             "heuristic": "Randomly place SBI's realized per-arm fake budget after initialization; exactly match counts and true-mean cost.",
             "li": "Unbounded reference; not subject to the bounded methods' reward interval.",
         },
@@ -64,7 +65,7 @@ def main():
     parser.add_argument("--threads", type=int, default=min(6, os.cpu_count() or 1))
     parser.add_argument("--output", type=Path, default=ROOT / "results/horizon")
     parser.add_argument("--quick", action="store_true", help="Small pilot; never used as the publication run")
-    parser.add_argument("--lower-bound", type=float, default=-64, help="Shared fixed fake reward for SBI, PBI, and the matched heuristic")
+    parser.add_argument("--lower-bound", type=float, default=-70, help="Shared fixed fake reward for SBI, PBI, and the matched heuristic")
     parser.add_argument("--batch-size", type=int, default=10)
     parser.add_argument("--seed-base", type=int, default=3141592653)
     parser.add_argument("--ratio-only", action="store_true", help="Parameter probe at T=100000")
