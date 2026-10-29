@@ -13,7 +13,7 @@ python3 experiments/run.py --threads 6
 python3 experiments/report.py --output results/report
 ```
 
-The first command builds the simulator, runs its correctness checks, verifies the supplied MovieLens matrix, and generates raw results. The second independently audits the sample counts and costs before exporting six TikZ figures and three tables.
+The first command builds the simulator, runs its correctness checks, verifies the supplied MovieLens matrix, and generates raw results. The second independently audits the sample counts and costs before exporting four TikZ figures and three tables. Attack-parameter sweeps remain in the raw results; the main figures show cost versus horizon and target-arm selection.
 
 Optional vector PDF export requires pdfLaTeX with TikZ and PGFPlots:
 

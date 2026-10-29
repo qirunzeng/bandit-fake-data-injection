@@ -7,8 +7,8 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-PLOTS = ("ucb-cost-delta", "ucb-cost-horizon", "ucb-selection-ratio",
-         "ts-cost-delta", "ts-cost-horizon", "ts-selection-ratio")
+PLOTS = ("ucb-cost-horizon", "ucb-selection-ratio",
+         "ts-cost-horizon", "ts-selection-ratio")
 
 
 def build(report):
@@ -24,7 +24,7 @@ def build(report):
 \input{fig/plot-style}
 \begin{document}
 \newsavebox{\exportbox}
-\setlength{\linewidth}{137.6pt}
+\setlength{\linewidth}{206.4pt}
 """
     end = r"""\unskip}
 \pdfpagewidth=\wd\exportbox

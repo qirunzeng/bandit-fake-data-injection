@@ -129,7 +129,7 @@ def summaries(runs, target):
                           "infeasible_trials": sum(int(r["infeasible_arms"]) > 0 for r in rows),
                           "ratio_at_least_95pct_trials": sum(float(r["ratio"]) >= 0.95 for r in rows)})
     with (target / "summary.csv").open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(summaries[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(summaries[0]), lineterminator="\n")
         writer.writeheader(); writer.writerows(summaries)
     (target / "summary.json").write_text(json.dumps(summaries, indent=2) + "\n")
     tex = [r"\begin{tabular}{llrrrr}", r"\toprule",
@@ -168,11 +168,18 @@ def summaries(runs, target):
 def export(source, output):
     runs, traces, manifest = load_results(source)
     fig = output / "fig"; target = fig / "data"; target.mkdir(parents=True, exist_ok=True)
+    # Parameter sweeps remain in raw results and summary tables, not the main figures.
+    for learner in ("ucb", "ts"):
+        name = learner + "-cost-delta"
+        for suffix in (".tex", ".pdf"):
+            path = fig / (name + suffix)
+            if path.exists(): path.unlink()
+        for path in target.glob(name + "*.dat"): path.unlink()
     fields = ["x"] + [k for m in METHODS for k in (m, m + "_low", m + "_high")]
     provenance = dict(manifest)
     provenance["plots"] = {}
     for learner in ("ucb", "ts"):
-        for kind in ("delta", "horizon", "ratio"):
+        for kind in ("horizon", "ratio"):
             name = learner + "-" + ("selection-ratio" if kind == "ratio" else "cost-" + kind)
             rows = [r for r in (traces if kind == "ratio" else runs) if r["learner"] == learner
                     and (kind == "ratio" or r["grid"] == kind)]
@@ -201,7 +208,7 @@ def export(source, output):
                 "horizon_axis": "logarithmic" if kind == "horizon" else "linear"}
     summaries(runs, target)
     (target / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
-    print(f"Exported six corrected figures and three summary tables to {fig}")
+    print(f"Exported four corrected figures and three summary tables to {fig}")
 
 
 if __name__ == "__main__":

@@ -37,7 +37,7 @@ def prepare(source, target):
     means = [sum(values[i * movies + j] for i in range(users)) / users for j in range(movies)]
     target.mkdir(parents=True, exist_ok=True)
     with (target / "movielens-means.csv").open("w", newline="") as stream:
-        writer = csv.writer(stream)
+        writer = csv.writer(stream, lineterminator="\n")
         writer.writerow(("column", "interaction_probability"))
         writer.writerows(enumerate(means))
     metadata = {
