@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build, validate, and run the corrected experiments using Python and a C++17 compiler."""
+"""Build and run the experiments using Python and a C++17 compiler."""
 import argparse
 import csv
 import hashlib
@@ -20,12 +20,11 @@ def sha256(path):
 def manifest(output, mode):
     with (output / "runs.csv").open() as stream:
         rows = list(csv.DictReader(stream))
-    sources = ["experiments/simulator.cpp", "experiments/prepare_data.py", "experiments/run.py", "experiments/report.py", "experiments/search_reward.cpp", "experiments/audit_pbi.cpp"]
+    sources = ["experiments/simulator.cpp", "experiments/prepare_data.py", "experiments/run.py", "experiments/report.py",
+               "experiments/build_figures.py", "experiments/plot-style.tex"]
     record = {
         "schema_version": 3,
         "repository": "qirunzeng/bandit-fake-data-injection",
-        "upstream_repository": "richardhoff88/online_learning_torank",
-        "upstream_commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
         "mode": mode,
         "source_sha256": {name: sha256(ROOT / name) for name in sources},
         "result_sha256": {name: sha256(output / name) for name in ("runs.csv", "trajectories.csv")},

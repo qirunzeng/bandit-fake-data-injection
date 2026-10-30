@@ -1,5 +1,3 @@
-MovieLens/
-
 # Local builds and interpreter caches
 build/
 __pycache__/

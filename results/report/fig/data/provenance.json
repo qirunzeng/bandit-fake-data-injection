@@ -1,16 +1,14 @@
 {
   "schema_version": 3,
   "repository": "qirunzeng/bandit-fake-data-injection",
-  "upstream_repository": "richardhoff88/online_learning_torank",
-  "upstream_commit": "dc2d3df799ec11d5d6111a5d8986c6d0dda41550",
   "mode": "full",
   "source_sha256": {
     "experiments/simulator.cpp": "8209d2797d946b7bafc73b70631e584452794b3d9e106249f68559a2b9090dc9",
     "experiments/prepare_data.py": "1f63ed9e04b79f292452b0fcb9ff62202ad95ca60f94d9a62ea3f180640739a2",
-    "experiments/run.py": "d527a6bf47cffa39cd741b44ffb5aae2c98961a1d63681fe4aafb0ea02c5e740",
-    "experiments/report.py": "1048dbd8dbc6f3f89e53d4bb3d3a42a83530649b813dae7e28829b44377f023d",
-    "experiments/search_reward.cpp": "22a928269a58a374a0ea4df7eb1bc442e85996a500d05f33e709a15090af9fb8",
-    "experiments/audit_pbi.cpp": "cd4c9bdd7990035847708ab81447f7e884220b0e24c40cc1ea9bf3e1f50c6924"
+    "experiments/run.py": "b7f31d79a0ac540c300ccf4dba5bf6ac965d72e3b1100a9e3a7bb94774b6cb27",
+    "experiments/report.py": "e827caef5cdf664ed666606da4e252ece4511df9f1eae84b20027da6e39808e5",
+    "experiments/build_figures.py": "cb4eb3140e4fb86209d927efdcb267c09c50752edd767f65bfb9e515f53b7016",
+    "experiments/plot-style.tex": "fb6a7a429c3ede51a0edef30be30f69cc38b719b09737a760586db0dfded0342"
   },
   "result_sha256": {
     "runs.csv": "50a82a00fd63dc12ccae747dad4e85fc559812c707057f5d79935f11302cf262",
@@ -303,7 +301,7 @@
     "heuristic": "Randomly place SBI's realized per-arm fake budget after initialization; exactly match counts and true-mean cost.",
     "li": "Unbounded reference; not subject to the bounded methods' reward interval."
   },
-  "exporter_sha256": "1048dbd8dbc6f3f89e53d4bb3d3a42a83530649b813dae7e28829b44377f023d",
+  "exporter_sha256": "e827caef5cdf664ed666606da4e252ece4511df9f1eae84b20027da6e39808e5",
   "plots": {
     "ucb-cost-horizon": {
       "rows": 112,

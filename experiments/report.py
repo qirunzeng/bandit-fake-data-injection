@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Audit corrected runs and export measured curves, tables, and TikZ figures.
+"""Validate runs and export summary data and TikZ figures.
 
 Only Python's standard library is required. Run from the repository root:
 python3 experiments/report.py --source results/horizon --output results/report
-To update the manuscript, set --output to the manuscript directory.
 """
 import argparse
 from collections import defaultdict
@@ -114,7 +113,7 @@ def figure(name, kind, values):
         top = math.ceil((peak + 0.03 * span) / step) * step
         options.extend([r"title={Attack cost $C^F$}",
                         f"ymin={bottom:.10g}, ymax={top:.10g}", r"scaled y ticks=true"])
-    lines = ["% Generated from corrected experiments; markers are measured points.",
+    lines = ["% Generated from experiment results; markers are measured points.",
              r"\begin{tikzpicture}", r"\begin{axis}[fdi axis," + ",\n    ".join(options) + "]"]
     for method in METHODS:
         lines.append(r"\addplot[fdi " + method + " band, forget plot] table[x=x,y=" + method
@@ -144,40 +143,6 @@ def summaries(runs, target):
     with (target / "summary.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(summaries[0]), lineterminator="\n")
         writer.writeheader(); writer.writerows(summaries)
-    (target / "summary.json").write_text(json.dumps(summaries, indent=2) + "\n")
-    tex = [r"\begin{tabular}{llrrrr}", r"\toprule",
-           r"Learner & Method & $N^F$ & $C^F$ & Target (\%) & Infeasible trials \\", r"\midrule"]
-    for learner in ("ucb", "ts"):
-        endpoint = max(float(r["T"]) for r in runs if r["grid"] == "horizon" and r["learner"] == learner)
-        for method in METHODS:
-            s = next(s for s in summaries if s["learner"] == learner and s["grid"] == "horizon"
-                     and s["x"] == endpoint and s["method"] == method)
-            name = "Heuristic" if method == "heuristic" else method.upper()
-            tex.append(f"{learner.upper()} & {name} & {s['mean_fakes']:.1f} & {s['mean_cost']:.1f} & "
-                       + f"{100*s['mean_ratio']:.2f} & {s['infeasible_trials']}/{s['trials']}" + r" \\")
-        if learner == "ucb": tex.append(r"\midrule")
-    tex.extend([r"\bottomrule", r"\end{tabular}", ""])
-    (target / "attack-summary.tex").write_text("\n".join(tex))
-    tex = [r"\begin{tabular}{lrrrrr}", r"\toprule",
-           r"Learner & Batch $f$ & $N^F$ & $C^F$ & Target (\%) & Infeasible trials \\", r"\midrule"]
-    for learner in ("ucb", "ts"):
-        for s in summaries:
-            if s["learner"] == learner and s["grid"] == "batch" and s["method"] == "pbi":
-                tex.append(f"{learner.upper()} & {int(s['x'])} & {s['mean_fakes']:.1f} & {s['mean_cost']:.1f} & "
-                           + f"{100*s['mean_ratio']:.2f} & {s['infeasible_trials']}/{s['trials']}" + r" \\")
-        if learner == "ucb": tex.append(r"\midrule")
-    tex.extend([r"\bottomrule", r"\end{tabular}", ""])
-    (target / "batch-feasibility.tex").write_text("\n".join(tex))
-    tex = [r"\begin{tabular}{lrrrrr}", r"\toprule",
-           r"Learner & Fake reward & $N^F$ & $C^F$ & Target (\%) & Infeasible trials \\", r"\midrule"]
-    for learner in ("ucb", "ts"):
-        selected = [s for s in summaries if s["learner"] == learner and s["grid"] == "strength" and s["method"] == "pbi"]
-        for s in sorted(selected, key=lambda s: s["x"], reverse=True):
-            tex.append(f"{learner.upper()} & {int(s['x'])} & {s['mean_fakes']:.1f} & {s['mean_cost']:.1f} & "
-                       + f"{100*s['mean_ratio']:.2f} & {s['infeasible_trials']}/{s['trials']}" + r" \\")
-        if learner == "ucb": tex.append(r"\midrule")
-    tex.extend([r"\bottomrule", r"\end{tabular}", ""])
-    (target / "reward-sensitivity.tex").write_text("\n".join(tex))
 
 
 def export(source, output):
@@ -193,13 +158,6 @@ def export(source, output):
     if actual != expected or len(horizon_runs) != len(expected):
         raise ValueError("Both panels require the same complete grid of 20 trials and four methods")
     fig = output / "fig"; target = fig / "data"; target.mkdir(parents=True, exist_ok=True)
-    # Parameter sweeps remain in raw results and summary tables, not the main figures.
-    for learner in ("ucb", "ts"):
-        name = learner + "-cost-delta"
-        for suffix in (".tex", ".pdf"):
-            path = fig / (name + suffix)
-            if path.exists(): path.unlink()
-        for path in target.glob(name + "*.dat"): path.unlink()
     fields = ["x"] + [k for m in METHODS for k in (m, m + "_low", m + "_high")]
     provenance = dict(manifest)
     provenance["exporter_sha256"] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
@@ -230,14 +188,13 @@ def export(source, output):
                 "horizon_axis": "linear"}
     summaries(runs, target)
     (target / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
-    print(f"Exported four corrected figures and three summary tables to {fig}")
+    print(f"Exported four figures and summary.csv to {fig}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    local_clone = ROOT / "experiments/bandit-fake-data-injection/results/horizon"
-    parser.add_argument("--source", type=Path, default=local_clone if local_clone.exists() else ROOT / "results/horizon")
-    parser.add_argument("--output", type=Path, default=ROOT if (ROOT / "0-main.tex").exists() else ROOT / "results/report")
+    parser.add_argument("--source", type=Path, default=ROOT / "results/horizon")
+    parser.add_argument("--output", type=Path, default=ROOT / "results/report")
     parser.add_argument("--audit-only", action="store_true", help="Validate runs without exporting publication figures")
     arguments = parser.parse_args()
     if arguments.audit_only:

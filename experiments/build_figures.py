@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build standalone vector PDFs from a corrected report using pdfLaTeX."""
+"""Build standalone vector PDFs from experiment results using pdfLaTeX."""
 import argparse
 from pathlib import Path
 import shutil
